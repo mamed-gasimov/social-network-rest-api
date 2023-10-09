@@ -2,49 +2,59 @@ import { DataTypes, Model, Optional, Sequelize } from 'sequelize';
 
 import { Models } from '@interfaces/general';
 
-interface ProjectAttributes {
+interface FeedBackAttributes {
   id: number;
-  userId: number;
-  image: string;
-  description: string;
+  fromUser: number;
+  toUser: number;
+  content: string;
+  companyName: string;
 }
 
-export class Project extends Model<ProjectAttributes, Optional<ProjectAttributes, 'id'>> implements ProjectAttributes {
+export class FeedBack
+  extends Model<FeedBackAttributes, Optional<FeedBackAttributes, 'id'>>
+  implements FeedBackAttributes
+{
   id: number;
 
-  userId: number;
+  fromUser: number;
 
-  image: string;
+  toUser: number;
 
-  description: string;
+  content: string;
+
+  companyName: string;
 
   readonly createdAt: Date;
 
   readonly updatedAt: Date;
 
   static defineSchema(sequelize: Sequelize) {
-    Project.init(
+    FeedBack.init(
       {
         id: {
           type: DataTypes.INTEGER.UNSIGNED,
           autoIncrement: true,
           primaryKey: true,
         },
-        image: {
-          type: new DataTypes.STRING(256),
+        fromUser: {
+          type: DataTypes.INTEGER.UNSIGNED,
           allowNull: false,
         },
-        description: {
+        toUser: {
+          type: DataTypes.INTEGER.UNSIGNED,
+          allowNull: false,
+        },
+        content: {
           type: new DataTypes.TEXT('long'),
           allowNull: false,
         },
-        userId: {
-          type: DataTypes.INTEGER.UNSIGNED,
+        companyName: {
+          type: new DataTypes.STRING(128),
           allowNull: false,
         },
       },
       {
-        tableName: 'projects',
+        tableName: 'feedbacks',
         underscored: true,
         sequelize,
       },

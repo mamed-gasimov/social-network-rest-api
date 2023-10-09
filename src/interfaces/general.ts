@@ -1,6 +1,6 @@
 import express from 'express';
 
-import { User, Project } from '@models/index';
+import { User, Project, FeedBack } from '@models/index';
 import { AuthService } from '@services/auth.service';
 
 export interface Context {
@@ -16,4 +16,5 @@ export type Loader = (app: express.Application, context: Context) => void;
 export interface Models {
   user: typeof User;
   project: typeof Project;
+  feedback: typeof FeedBack;
 }
