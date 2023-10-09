@@ -13,7 +13,9 @@
     "migrations:dev:pending": "npm run migrations:dev -- pending",
     "migrations:create": "npm run migrations:dev -- create",
     "lint": "eslint './src/**/*.ts'",
-    "lint:fix": "npm run lint -- --fix"
+    "lint:fix": "npm run lint -- --fix",
+    "format:check": "prettier --check 'src/**/*.{ts, json}'",
+    "format": "prettier --write 'src/**/*.{ts, json}'"
   },
   "keywords": [],
   "author": "",

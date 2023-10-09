@@ -1,6 +1,6 @@
 import express from 'express';
 
-import { User } from '@models/user.model';
+import { User, Project } from '@models/index';
 import { AuthService } from '@services/auth.service';
 
 export interface Context {
@@ -15,4 +15,5 @@ export type Loader = (app: express.Application, context: Context) => void;
 
 export interface Models {
   user: typeof User;
+  project: typeof Project;
 }
