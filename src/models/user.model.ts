@@ -88,15 +88,23 @@ export class User extends Model<UserAttributes, Optional<UserAttributes, 'id'>> 
       {
         tableName: 'users',
         underscored: true,
+        timestamps: true,
         sequelize,
       },
     );
   }
 
   static associate(models: Models, sequelize: Sequelize) {
-    // Example of how to define a association.
-    // User.hasMany(models.project, {
-    //   foreignKey: 'user_id'
-    // });
+    User.hasMany(models.project, {
+      foreignKey: 'user_id',
+    });
+
+    User.hasMany(models.experience, {
+      foreignKey: 'user_id',
+    });
+
+    User.hasMany(models.feedback);
+
+    sequelize.sync();
   }
 }

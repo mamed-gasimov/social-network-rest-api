@@ -37,10 +37,12 @@ export class FeedBack
           primaryKey: true,
         },
         fromUser: {
+          field: 'from_user',
           type: DataTypes.INTEGER.UNSIGNED,
           allowNull: false,
         },
         toUser: {
+          field: 'to_user',
           type: DataTypes.INTEGER.UNSIGNED,
           allowNull: false,
         },
@@ -49,6 +51,7 @@ export class FeedBack
           allowNull: false,
         },
         companyName: {
+          field: 'company_name',
           type: new DataTypes.STRING(128),
           allowNull: false,
         },
@@ -56,10 +59,21 @@ export class FeedBack
       {
         tableName: 'feedbacks',
         underscored: true,
+        timestamps: true,
         sequelize,
       },
     );
   }
 
-  static associate(models: Models, sequelize: Sequelize) {}
+  static associate(models: Models, sequelize: Sequelize) {
+    FeedBack.belongsTo(models.user, {
+      foreignKey: 'from_user',
+    });
+
+    FeedBack.belongsTo(models.user, {
+      foreignKey: 'to_user',
+    });
+
+    sequelize.sync();
+  }
 }

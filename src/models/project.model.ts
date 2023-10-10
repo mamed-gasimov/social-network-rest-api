@@ -39,6 +39,7 @@ export class Project extends Model<ProjectAttributes, Optional<ProjectAttributes
           allowNull: false,
         },
         userId: {
+          field: 'user_id',
           type: DataTypes.INTEGER.UNSIGNED,
           allowNull: false,
         },
@@ -46,10 +47,17 @@ export class Project extends Model<ProjectAttributes, Optional<ProjectAttributes
       {
         tableName: 'projects',
         underscored: true,
+        timestamps: true,
         sequelize,
       },
     );
   }
 
-  static associate(models: Models, sequelize: Sequelize) {}
+  static associate(models: Models, sequelize: Sequelize) {
+    Project.belongsTo(models.user, {
+      foreignKey: 'user_id',
+    });
+
+    sequelize.sync();
+  }
 }

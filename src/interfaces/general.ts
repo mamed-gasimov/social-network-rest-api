@@ -1,6 +1,6 @@
 import express from 'express';
 
-import { User, Project, FeedBack } from '@models/index';
+import { User, Project, FeedBack, Experience } from '@models/index';
 import { AuthService } from '@services/auth.service';
 
 export interface Context {
@@ -17,4 +17,5 @@ export interface Models {
   user: typeof User;
   project: typeof Project;
   feedback: typeof FeedBack;
+  experience: typeof Experience;
 }
