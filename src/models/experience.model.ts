@@ -57,11 +57,11 @@ export class Experience
           allowNull: false,
         },
         startDate: {
-          type: new DataTypes.DATE(),
+          type: DataTypes.DATE,
           allowNull: false,
         },
         endDate: {
-          type: new DataTypes.DATE(),
+          type: DataTypes.DATE,
           allowNull: true,
         },
         description: {
