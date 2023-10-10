@@ -1,5 +1,5 @@
-import { Context } from '../interfaces/general';
-import { AuthService } from '../services/auth.service';
+import { Context } from '@interfaces/general';
+import { AuthService } from '@services/auth.service';
 
 export const loadContext = async (): Promise<Context> => {
   return {

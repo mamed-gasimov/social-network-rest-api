@@ -1,3 +1,3 @@
-import { Loader } from '../interfaces/general';
+import { Loader } from '@interfaces/general';
 
 export const loadMiddlewares: Loader = (app, context) => {};
