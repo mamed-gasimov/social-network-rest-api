@@ -5,7 +5,9 @@ import { Context, RouterFactory } from '../interfaces/general';
 export const makeAuthRouter: RouterFactory = (context: Context) => {
   const router = express.Router();
 
-  // Define routes
+  router.get('/', (req, res) => {
+    res.status(200).json({ message: 'Hello!' });
+  });
 
   return router;
 };

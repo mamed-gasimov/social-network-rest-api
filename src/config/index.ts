@@ -22,8 +22,8 @@ const configs: {
     db: {
       host: 'localhost',
       port: 3306,
-      username: 'dev',
-      password: 'dev',
+      username: 'root',
+      password: 'root1234',
       database: 'capstone_project',
     },
     redis: {
