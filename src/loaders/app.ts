@@ -1,4 +1,6 @@
 import express from 'express';
+import requestID from 'express-request-id';
+import cors from 'cors';
 
 import { config } from '@config';
 
@@ -16,6 +18,14 @@ export const loadApp = async () => {
   loadModels(sequelize);
 
   const context = await loadContext();
+  app.use(cors());
+  app.use(requestID());
+  app.use(
+    express.urlencoded({
+      extended: true,
+    }),
+  );
+  app.use(express.json());
 
   loadPassport(app, context);
   loadMiddlewares(app, context);

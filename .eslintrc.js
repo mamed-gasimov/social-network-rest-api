@@ -54,6 +54,7 @@ module.exports = {
     'import/prefer-default-export': 'off',
     'no-unused-vars': 'off',
     '@typescript-eslint/no-unused-vars': 'warn',
+    'consistent-return': 'off',
     'no-shadow': 'off',
     '@typescript-eslint/no-shadow': 'warn',
     'import/no-cycle': 'off',

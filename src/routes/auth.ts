@@ -1,13 +1,15 @@
-import express, { Response } from 'express';
+import express from 'express';
+import multer from 'multer';
 
-import { Context, RouterFactory } from '../interfaces/general';
+import { registerController } from '@controllers/index';
+import { Context, RouterFactory } from '@interfaces/general';
+import { registerValidationSchema } from '@middleware/validation/register';
 
 export const makeAuthRouter: RouterFactory = (context: Context) => {
   const router = express.Router();
+  const upload = multer();
 
-  router.get('/', (req, res) => {
-    res.status(200).json({ message: 'Hello!' });
-  });
+  router.post('/register', upload.none(), registerValidationSchema, registerController);
 
   return router;
 };
