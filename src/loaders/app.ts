@@ -19,6 +19,7 @@ export const loadApp = async () => {
 
   const context = await loadContext(models);
   app.use(cors());
+  app.use(express.static('public'));
   app.use(requestID());
   app.use(
     express.urlencoded({

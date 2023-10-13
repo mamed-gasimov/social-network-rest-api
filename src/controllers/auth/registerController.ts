@@ -11,8 +11,6 @@ import { UserRole } from '@models/user.model';
 
 const registerController = (context: Context) => async (req: ExtendedRequest, res: Response) => {
   try {
-    logger.info(`${req.id}-${req.baseUrl}-${req.method}`);
-
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
@@ -38,11 +36,16 @@ const registerController = (context: Context) => async (req: ExtendedRequest, re
     const existedUser = await authService.findUserByEmail(email);
     if (existedUser) {
       logger.error('The user with the current email already exists.');
-      return res.status(400).json({ message: 'The user with the current email already exists.' });
+      return res.status(HTTP_STATUSES.BAD_REQUEST).json({ message: 'The user with the current email already exists.' });
     }
 
     const saltRounds = 12;
     const hashedPassword = await bcrypt.hash(password, saltRounds);
+
+    let image = 'default.png';
+    if (req.file) {
+      image = req.file.filename;
+    }
 
     const newUser = {
       firstName,
@@ -52,13 +55,14 @@ const registerController = (context: Context) => async (req: ExtendedRequest, re
       summary,
       title,
       role: UserRole.User,
-      image: '',
+      image,
     };
 
     const { id } = await authService.createUser(newUser);
     delete newUser.password;
     const createdUser = { ...newUser, id };
 
+    logger.info('User was successfully created');
     return res.status(HTTP_STATUSES.CREATED).json(createdUser);
   } catch (error) {
     logger.error(error);

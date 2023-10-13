@@ -35,7 +35,8 @@
     "pino": "^7.0.0-rc.8",
     "pino-pretty": "^7.0.1",
     "redis": "^3.1.2",
-    "sequelize": "^6.6.5"
+    "sequelize": "^6.6.5",
+    "uuid": "^9.0.1"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.0",
@@ -49,6 +50,7 @@
     "@types/passport-jwt": "^3.0.6",
     "@types/passport-local": "^1.0.34",
     "@types/redis": "^2.8.32",
+    "@types/uuid": "^9.0.5",
     "@types/validator": "^13.6.3",
     "@typescript-eslint/eslint-plugin": "^6.7.4",
     "@typescript-eslint/parser": "^6.7.4",
