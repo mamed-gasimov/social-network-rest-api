@@ -5,7 +5,7 @@ import bcrypt from 'bcrypt';
 import { ExtendedRequest } from '@interfaces/express';
 import { logger } from '@libs/logger';
 import { Context, HTTP_STATUSES } from '@interfaces/general';
-import { RegisterRequestBody } from '@interfaces/auth/register';
+import { RegisterRequestBody, RegisterResponseBody } from '@interfaces/auth/register';
 import { checkForAllowedFields } from 'src/helpers/checkForAllowedFields';
 import { UserRole } from '@models/user.model';
 
@@ -60,7 +60,7 @@ const registerController = (context: Context) => async (req: ExtendedRequest, re
 
     const { id } = await authService.createUser(newUser);
     delete newUser.password;
-    const createdUser = { ...newUser, id };
+    const createdUser: RegisterResponseBody = { ...newUser, id };
 
     logger.info('User was successfully created');
     return res.status(HTTP_STATUSES.CREATED).json(createdUser);

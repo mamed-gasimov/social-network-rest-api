@@ -8,7 +8,7 @@ export interface RegisterRequestBody {
 }
 
 export interface RegisterResponseBody {
-  id: string;
+  id: number;
   firstName: string;
   lastName: string;
   title: string;

@@ -1,4 +1,5 @@
 import express from 'express';
+import passport from 'passport';
 
 import { config } from '@config';
 
@@ -19,6 +20,9 @@ export const loadApp = async () => {
 
   loadPassport(app, context);
   loadMiddlewares(app, context);
+
+  app.use(passport.initialize());
+
   loadRoutes(app, context);
 
   return app;
