@@ -9,7 +9,7 @@ export const makeAuthRouter: RouterFactory = (context: Context) => {
   const router = express.Router();
   const upload = multer();
 
-  router.post('/register', upload.none(), registerValidationSchema, registerController);
+  router.post('/register', upload.none(), registerValidationSchema, registerController(context));
 
   return router;
 };

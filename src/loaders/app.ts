@@ -15,9 +15,9 @@ export const loadApp = async () => {
   const app = express();
   const sequelize = loadSequelize(config);
 
-  loadModels(sequelize);
+  const models = loadModels(sequelize);
 
-  const context = await loadContext();
+  const context = await loadContext(models);
   app.use(cors());
   app.use(requestID());
   app.use(

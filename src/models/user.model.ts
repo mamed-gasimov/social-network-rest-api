@@ -7,7 +7,7 @@ export enum UserRole {
   User = 'User',
 }
 
-interface UserAttributes {
+export interface UserAttributes {
   id: number;
   firstName: string;
   lastName: string;
@@ -79,6 +79,7 @@ export class User extends Model<UserAttributes, Optional<UserAttributes, 'id'>> 
         email: {
           type: DataTypes.STRING,
           allowNull: false,
+          unique: true,
         },
         password: {
           type: DataTypes.STRING,
