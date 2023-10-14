@@ -29,6 +29,7 @@ const loginController = async (req: ExtendedRequest, res: Response) => {
 
     passport.authenticate('local', (err, user) => {
       if (err || !user) {
+        logger.error('Invalid credentials');
         return res.status(HTTP_STATUSES.BAD_REQUEST).json({ message: 'Invalid credentials' });
       }
 
@@ -37,7 +38,8 @@ const loginController = async (req: ExtendedRequest, res: Response) => {
           return res.json(error);
         }
 
-        const token = jwt.sign({ user: user.id }, 'some secret string here');
+        const token = jwt.sign({ user: user.id }, 'some secret string here', { expiresIn: '2d' });
+        logger.info('User successfully logged in');
         return res.json({ user, token });
       });
     })(req, res);

@@ -60,6 +60,7 @@ const registerController = (context: Context) => async (req: ExtendedRequest, re
 
     const { id } = await authService.createUser(newUser);
     delete newUser.password;
+    delete newUser.role;
     const createdUser: RegisterResponseBody = { ...newUser, id };
 
     logger.info('User was successfully created');
