@@ -25,8 +25,8 @@ export const loadPassport: Loader = (_app, context) => {
             return done(null, null);
           }
 
-          const { id } = user;
-          done(null, { id });
+          const { id, role } = user;
+          done(null, { id, role });
         } catch (e) {
           done(e);
         }
