@@ -5,9 +5,9 @@ import { ExtendedRequest } from '@interfaces/express';
 import { logger } from '@libs/logger';
 import { Context, HTTP_STATUSES } from '@interfaces/general';
 import { checkForAllowedFields } from '@helpers/checkForAllowedFields';
-import { GetUsersRequestQuery } from '@interfaces/users/getUsers';
+import { GetUserRequestParams, GetUserResponseBody } from '@interfaces/users/getUsers';
 
-const getUsersController = (context: Context) => async (req: ExtendedRequest, res: Response) => {
+const getUserController = (context: Context) => async (req: ExtendedRequest, res: Response) => {
   try {
     const errors = validationResult(req);
 
@@ -16,9 +16,9 @@ const getUsersController = (context: Context) => async (req: ExtendedRequest, re
       return res.status(HTTP_STATUSES.BAD_REQUEST).json({ message: errors.array()?.[0]?.msg });
     }
 
-    const allowedKeys = ['pageSize', 'page'];
+    const allowedKeys = ['id'];
     if (Object.keys(req.query).length > allowedKeys.length) {
-      const onlyAllowedFields = checkForAllowedFields(req.query, allowedKeys);
+      const onlyAllowedFields = checkForAllowedFields(req.params, allowedKeys);
 
       if (!onlyAllowedFields) {
         logger.error('Invalid fields');
@@ -26,27 +26,37 @@ const getUsersController = (context: Context) => async (req: ExtendedRequest, re
       }
     }
 
-    const { page, pageSize } = req.query as unknown as GetUsersRequestQuery;
+    const { id } = req.params as unknown as GetUserRequestParams;
 
     const {
       services: { usersService },
     } = context;
 
     const selectFields = ['id', 'firstName', 'lastName', 'email', 'title', 'summary', 'role'];
-    const skip = (page - 1) * pageSize;
-    const { rows } = await usersService.getUsers(selectFields, +skip, +pageSize);
-    const { id } = req.user as { id: number };
-    const usersExcludeCurrent = rows.filter((row) => row.id !== id);
+    const foundUser = await usersService.getUser(selectFields, id);
 
-    logger.info('List of users was successfully returned');
-    return res
-      .status(HTTP_STATUSES.OK)
-      .header('X-total-count', `${usersExcludeCurrent.length}`)
-      .json(usersExcludeCurrent);
+    if (!foundUser) {
+      logger.error('User was not found');
+      return res.status(HTTP_STATUSES.NOT_FOUND).json({ message: 'User was not found' });
+    }
+
+    const { firstName, lastName, title, summary, email, role } = foundUser;
+    const resBody: GetUserResponseBody = {
+      id: `${id}`,
+      firstName,
+      lastName,
+      title,
+      summary,
+      email,
+      role,
+    };
+
+    logger.info('User was found successfully');
+    return res.status(HTTP_STATUSES.OK).json(resBody);
   } catch (error) {
     logger.error(error);
     return res.status(HTTP_STATUSES.INTERNAL_SERVER_ERROR).json({ message: 'Something went wrong on the server.' });
   }
 };
 
-export default getUsersController;
+export default getUserController;

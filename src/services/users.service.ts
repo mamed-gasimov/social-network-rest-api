@@ -7,12 +7,19 @@ export class UsersService {
     this.userModel = userModel;
   }
 
-  async findAll(selectFields: string[], offset: number, limit: number) {
+  async getUsers(selectFields: string[], offset: number, limit: number) {
     return this.userModel.findAndCountAll({
       attributes: selectFields,
       offset,
       limit,
       order: [['id', 'DESC']],
+    });
+  }
+
+  async getUser(selectFields: string[], id: number) {
+    return this.userModel.findOne({
+      where: { id },
+      attributes: selectFields,
     });
   }
 }
