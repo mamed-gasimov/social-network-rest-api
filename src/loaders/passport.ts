@@ -19,7 +19,7 @@ export const loadPassport: Loader = (_app, context) => {
       },
       async (jwtPayload, done) => {
         try {
-          const user = await authService.findUserByEmail(jwtPayload.email);
+          const user = await authService.findUserById(jwtPayload.user);
 
           if (!user) {
             return done(null, null);

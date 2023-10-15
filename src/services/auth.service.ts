@@ -12,6 +12,10 @@ export class AuthService {
   }
 
   async findUserByEmail(email: string) {
-    return this.userModel.findOne({ where: { email: email.toLowerCase() } });
+    return this.userModel.findOne({ where: { email: email?.toLowerCase() } });
+  }
+
+  async findUserById(id: string) {
+    return this.userModel.findOne({ where: { id } });
   }
 }
