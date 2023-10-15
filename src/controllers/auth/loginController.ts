@@ -6,7 +6,7 @@ import jwt from 'jsonwebtoken';
 import { ExtendedRequest } from '@interfaces/express';
 import { HTTP_STATUSES } from '@interfaces/general';
 import { logger } from '@libs/logger';
-import { checkForAllowedFields } from 'src/helpers/checkForAllowedFields';
+import { checkForAllowedFields } from '@helpers/checkForAllowedFields';
 
 const loginController = async (req: ExtendedRequest, res: Response) => {
   try {
@@ -19,7 +19,7 @@ const loginController = async (req: ExtendedRequest, res: Response) => {
 
     const allowedKeys = ['email', 'password'];
     if (Object.keys(req.body).length > allowedKeys.length) {
-      const onlyAllowedFields = checkForAllowedFields(req, allowedKeys);
+      const onlyAllowedFields = checkForAllowedFields(req.body, allowedKeys);
 
       if (!onlyAllowedFields) {
         logger.error('Invalid fields');

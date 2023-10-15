@@ -6,7 +6,7 @@ import { ExtendedRequest } from '@interfaces/express';
 import { logger } from '@libs/logger';
 import { Context, HTTP_STATUSES } from '@interfaces/general';
 import { RegisterRequestBody, RegisterResponseBody } from '@interfaces/auth/register';
-import { checkForAllowedFields } from 'src/helpers/checkForAllowedFields';
+import { checkForAllowedFields } from '@helpers/checkForAllowedFields';
 import { UserRole } from '@models/user.model';
 
 const registerController = (context: Context) => async (req: ExtendedRequest, res: Response) => {
@@ -20,7 +20,7 @@ const registerController = (context: Context) => async (req: ExtendedRequest, re
 
     const allowedKeys = ['firstName', 'lastName', 'email', 'password', 'summary', 'title'];
     if (Object.keys(req.body).length > allowedKeys.length) {
-      const onlyAllowedFields = checkForAllowedFields(req, allowedKeys);
+      const onlyAllowedFields = checkForAllowedFields(req.body, allowedKeys);
 
       if (!onlyAllowedFields) {
         logger.error('Invalid fields');

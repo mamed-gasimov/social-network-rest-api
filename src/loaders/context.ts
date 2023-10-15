@@ -1,5 +1,6 @@
 import { Context, Models } from '@interfaces/general';
 import { AuthService } from '@services/auth.service';
+import { UsersService } from '@services/users.service';
 
 export const loadContext = async (models: Models): Promise<Context> => {
   const { user: userModel } = models;
@@ -7,6 +8,7 @@ export const loadContext = async (models: Models): Promise<Context> => {
   return {
     services: {
       authService: new AuthService(userModel),
+      usersService: new UsersService(userModel),
     },
   };
 };
