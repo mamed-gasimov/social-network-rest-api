@@ -2,7 +2,12 @@ import express from 'express';
 import multer from 'multer';
 
 import { Context, RouterFactory } from '@interfaces/general';
-import { createUserController, deleteUserController, getUsersController } from '@controllers/index';
+import {
+  createUserController,
+  deleteUserController,
+  getUsersController,
+  updateUserController,
+} from '@controllers/index';
 import { logRequestId } from '@middleware/logger/logRequestId';
 import { createUserValidationSchema, userIdValidationSchema, getUsersValidationSchema } from '@middleware/validation';
 import { roles } from '@middleware/roles/checkRole';
@@ -22,9 +27,26 @@ export const makeUsersRouter: RouterFactory = (context: Context) => {
     createUserValidationSchema,
     createUserController(context),
   );
+
   router.get('/', logRequestId, roles([UserRole.Admin]), getUsersValidationSchema, getUsersController(context));
   router.get('/:id', logRequestId, userIdValidationSchema, getUserController(context));
-  router.delete('/:id', logRequestId, userOwnAccount, userIdValidationSchema, deleteUserController(context));
+
+  router.delete(
+    '/:id',
+    logRequestId,
+    userOwnAccount({ checkForAdmin: true }),
+    userIdValidationSchema,
+    deleteUserController(context),
+  );
+
+  router.put(
+    '/:id',
+    logRequestId,
+    upload.none(),
+    userOwnAccount({ checkForAdmin: false }),
+    userIdValidationSchema,
+    updateUserController(context),
+  );
 
   return router;
 };
