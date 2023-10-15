@@ -22,4 +22,10 @@ export class UsersService {
       attributes: selectFields,
     });
   }
+
+  async deleteUser(id: number) {
+    return this.userModel.destroy({
+      where: { id },
+    });
+  }
 }
