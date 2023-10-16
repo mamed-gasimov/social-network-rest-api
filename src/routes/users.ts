@@ -14,6 +14,7 @@ import { roles } from '@middleware/roles/checkRole';
 import { UserRole } from '@models/user.model';
 import getUserController from '@controllers/users/getUserController';
 import { userOwnAccount } from '@middleware/roles/userOwnAccount';
+import { uploadFile } from '@middleware/uploadFile/uploadFile';
 
 export const makeUsersRouter: RouterFactory = (context: Context) => {
   const router = express.Router();
@@ -42,9 +43,9 @@ export const makeUsersRouter: RouterFactory = (context: Context) => {
   router.put(
     '/:id',
     logRequestId,
-    upload.none(),
+    uploadFile,
     userOwnAccount({ checkForAdmin: false }),
-    userIdValidationSchema,
+    [...userIdValidationSchema, ...createUserValidationSchema],
     updateUserController(context),
   );
 

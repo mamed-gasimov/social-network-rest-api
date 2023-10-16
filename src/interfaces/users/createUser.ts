@@ -3,6 +3,7 @@ import { UserRole } from '@models/user.model';
 
 export interface CreateUserRequestBody extends RegisterRequestBody {
   role: UserRole;
+  image?: string;
 }
 
 export interface CreateUserResponseBody {

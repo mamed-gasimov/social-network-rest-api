@@ -1,3 +1,4 @@
+import { CreateUserRequestBody } from '@interfaces/users/createUser';
 import { User } from '@models/user.model';
 
 export class UsersService {
@@ -20,6 +21,12 @@ export class UsersService {
     return this.userModel.findOne({
       where: { id },
       attributes: selectFields,
+    });
+  }
+
+  async updateUser(id: number, data: CreateUserRequestBody) {
+    return this.userModel.update(data, {
+      where: { id },
     });
   }
 
