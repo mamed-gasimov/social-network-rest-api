@@ -5,11 +5,9 @@ import bcrypt from 'bcrypt';
 import { ExtendedRequest } from '@interfaces/express';
 import { logger } from '@libs/logger';
 import { Context, HTTP_STATUSES } from '@interfaces/general';
-import { RegisterRequestBody, RegisterResponseBody } from '@interfaces/auth/register';
-import { checkForAllowedFields } from '@helpers/checkForAllowedFields';
-import { UserRole } from '@models/user.model';
+import { CreateUserRequestBody, CreateUserResponseBody } from '@interfaces/users/createUser';
 
-const registerController = (context: Context) => async (req: ExtendedRequest, res: Response) => {
+const createUserController = (context: Context) => async (req: ExtendedRequest, res: Response) => {
   try {
     const errors = validationResult(req);
 
@@ -18,17 +16,7 @@ const registerController = (context: Context) => async (req: ExtendedRequest, re
       return res.status(HTTP_STATUSES.BAD_REQUEST).json({ message: errors.array()?.[0]?.msg });
     }
 
-    const allowedKeys = ['firstName', 'lastName', 'email', 'password', 'summary', 'title'];
-    if (Object.keys(req.body).length > allowedKeys.length) {
-      const onlyAllowedFields = checkForAllowedFields(req.body, allowedKeys);
-
-      if (!onlyAllowedFields) {
-        logger.error('Invalid fields');
-        return res.status(HTTP_STATUSES.BAD_REQUEST).json({ message: 'Invalid fields' });
-      }
-    }
-
-    const { firstName, lastName, email, password, summary, title } = req.body as RegisterRequestBody;
+    const { firstName, lastName, email, password, summary, title, role } = req.body as CreateUserRequestBody;
     const {
       services: { authService },
     } = context;
@@ -41,11 +29,7 @@ const registerController = (context: Context) => async (req: ExtendedRequest, re
 
     const saltRounds = 12;
     const hashedPassword = await bcrypt.hash(password, saltRounds);
-
-    let image = 'default.png';
-    if (req.file) {
-      image = req.file.filename;
-    }
+    const image = 'default.png';
 
     const newUser = {
       firstName,
@@ -54,14 +38,14 @@ const registerController = (context: Context) => async (req: ExtendedRequest, re
       password: hashedPassword,
       summary,
       title,
-      role: UserRole.User,
+      role,
       image,
     };
 
     const { id } = await authService.createUser(newUser);
     delete newUser.password;
-    delete newUser.role;
-    const createdUser: RegisterResponseBody = { ...newUser, id: `${id}` };
+    delete newUser.image;
+    const createdUser: CreateUserResponseBody = { ...newUser, id: `${id}` };
 
     logger.info('User was successfully created');
     return res.status(HTTP_STATUSES.CREATED).json(createdUser);
@@ -71,4 +55,4 @@ const registerController = (context: Context) => async (req: ExtendedRequest, re
   }
 };
 
-export default registerController;
+export default createUserController;

@@ -16,3 +16,12 @@ export interface RegisterResponseBody {
   email: string;
   image: string;
 }
+
+export const allowedKeysForRegister = {
+  email: 1,
+  password: 2,
+  firstName: 3,
+  lastName: 4,
+  title: 5,
+  summary: 6,
+};

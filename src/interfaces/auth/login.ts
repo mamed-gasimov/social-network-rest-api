@@ -15,3 +15,8 @@ export interface LoginResponseBody {
   };
   token: string;
 }
+
+export const allowedKeysForLogin = {
+  email: 1,
+  password: 2,
+};

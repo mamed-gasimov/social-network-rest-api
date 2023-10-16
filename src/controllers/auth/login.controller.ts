@@ -6,7 +6,6 @@ import jwt from 'jsonwebtoken';
 import { ExtendedRequest } from '@interfaces/express';
 import { HTTP_STATUSES } from '@interfaces/general';
 import { logger } from '@libs/logger';
-import { checkForAllowedFields } from '@helpers/checkForAllowedFields';
 
 const loginController = async (req: ExtendedRequest, res: Response) => {
   try {
@@ -15,16 +14,6 @@ const loginController = async (req: ExtendedRequest, res: Response) => {
     if (!errors.isEmpty()) {
       logger.error(errors.array()?.[0]?.msg);
       return res.status(HTTP_STATUSES.BAD_REQUEST).json({ message: errors.array()?.[0]?.msg });
-    }
-
-    const allowedKeys = ['email', 'password'];
-    if (Object.keys(req.body).length > allowedKeys.length) {
-      const onlyAllowedFields = checkForAllowedFields(req.body, allowedKeys);
-
-      if (!onlyAllowedFields) {
-        logger.error('Invalid fields');
-        return res.status(HTTP_STATUSES.BAD_REQUEST).json({ message: 'Invalid fields' });
-      }
     }
 
     passport.authenticate('local', (err, user) => {

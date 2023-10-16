@@ -5,7 +5,6 @@ import bcrypt from 'bcrypt';
 import { ExtendedRequest } from '@interfaces/express';
 import { logger } from '@libs/logger';
 import { Context, HTTP_STATUSES } from '@interfaces/general';
-import { checkForAllowedFields } from '@helpers/checkForAllowedFields';
 import { UserRole } from '@models/user.model';
 import { CreateUserRequestBody, CreateUserResponseBody } from '@interfaces/users/createUser';
 
@@ -16,18 +15,6 @@ const updateUserController = (context: Context) => async (req: ExtendedRequest, 
     if (!errors.isEmpty()) {
       logger.error(errors.array()?.[0]?.msg);
       return res.status(HTTP_STATUSES.BAD_REQUEST).json({ message: errors.array()?.[0]?.msg });
-    }
-
-    const allowedKeys = ['id'];
-    const allowedRqBodyKeys = ['firstName', 'lastName', 'email', 'password', 'summary', 'title', 'role'];
-    if (Object.keys(req.query).length > allowedKeys.length || Object.keys(req.body).length > allowedRqBodyKeys.length) {
-      const onlyAllowedFields =
-        checkForAllowedFields(req.query, allowedKeys) && checkForAllowedFields(req.body, allowedRqBodyKeys);
-
-      if (!onlyAllowedFields) {
-        logger.error('Invalid fields');
-        return res.status(HTTP_STATUSES.BAD_REQUEST).json({ message: 'Invalid fields' });
-      }
     }
 
     const {

@@ -16,3 +16,8 @@ export interface GetUserResponseBody {
   email: string;
   role: string;
 }
+
+export const allowedKeysForGetUsers = {
+  pageSize: 1,
+  page: 2,
+};

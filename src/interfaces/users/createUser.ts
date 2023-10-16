@@ -15,3 +15,13 @@ export interface CreateUserResponseBody {
   email: string;
   role: string;
 }
+
+export const allowedKeysForCreateUser = {
+  email: 1,
+  password: 2,
+  firstName: 3,
+  lastName: 4,
+  title: 5,
+  summary: 6,
+  role: 7,
+};

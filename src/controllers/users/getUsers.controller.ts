@@ -4,7 +4,6 @@ import { validationResult } from 'express-validator';
 import { ExtendedRequest } from '@interfaces/express';
 import { logger } from '@libs/logger';
 import { Context, HTTP_STATUSES } from '@interfaces/general';
-import { checkForAllowedFields } from '@helpers/checkForAllowedFields';
 import { GetUsersRequestQuery } from '@interfaces/users/getUsers';
 
 const getUsersController = (context: Context) => async (req: ExtendedRequest, res: Response) => {
@@ -14,16 +13,6 @@ const getUsersController = (context: Context) => async (req: ExtendedRequest, re
     if (!errors.isEmpty()) {
       logger.error(errors.array()?.[0]?.msg);
       return res.status(HTTP_STATUSES.BAD_REQUEST).json({ message: errors.array()?.[0]?.msg });
-    }
-
-    const allowedKeys = ['pageSize', 'page'];
-    if (Object.keys(req.query).length > allowedKeys.length) {
-      const onlyAllowedFields = checkForAllowedFields(req.query, allowedKeys);
-
-      if (!onlyAllowedFields) {
-        logger.error('Invalid fields');
-        return res.status(HTTP_STATUSES.BAD_REQUEST).json({ message: 'Invalid fields' });
-      }
     }
 
     const { page, pageSize } = req.query as unknown as GetUsersRequestQuery;
