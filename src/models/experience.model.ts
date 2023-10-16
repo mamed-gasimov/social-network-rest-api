@@ -2,13 +2,13 @@ import { DataTypes, Model, Optional, Sequelize } from 'sequelize';
 
 import { Models } from '@interfaces/general';
 
-interface ExperienceAttributes {
+export interface ExperienceAttributes {
   id: number;
   userId: number;
   companyName: string;
   role: string;
-  startDate: string;
-  endDate: string;
+  startDate: Date;
+  endDate: Date;
   description: string;
 }
 
@@ -24,9 +24,9 @@ export class Experience
 
   role: string;
 
-  startDate: string;
+  startDate: Date;
 
-  endDate: string;
+  endDate: Date;
 
   description: string;
 
@@ -57,10 +57,12 @@ export class Experience
           allowNull: false,
         },
         startDate: {
+          field: 'start_date',
           type: DataTypes.DATE,
           allowNull: false,
         },
         endDate: {
+          field: 'end_date',
           type: DataTypes.DATE,
           allowNull: true,
         },
