@@ -16,7 +16,7 @@ export const loadApp = async () => {
 
   const models = loadModels(sequelize);
 
-  const context = await loadContext(models);
+  const context = await loadContext(models, sequelize);
 
   loadPassport(app, context);
   loadMiddlewares(app, context);

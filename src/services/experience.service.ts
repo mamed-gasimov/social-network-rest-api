@@ -1,3 +1,5 @@
+import { Transaction } from 'sequelize';
+
 import { Experience, ExperienceAttributes } from '@models/experience.model';
 
 export class ExperienceService {
@@ -17,6 +19,13 @@ export class ExperienceService {
       offset,
       limit,
       order: [['id', 'DESC']],
+    });
+  }
+
+  async deleteUserExperiences(userId: number, transaction: Transaction) {
+    return this.experienceModel.destroy({
+      where: { userId },
+      transaction,
     });
   }
 }
