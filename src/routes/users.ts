@@ -12,7 +12,7 @@ import {
 import { logRequestId } from '@middleware/logger/logRequestId';
 import {
   createUserValidationSchema,
-  userIdValidationSchema,
+  paramIdValidationSchema,
   getUsersValidationSchema,
   checkForAllowedFields,
 } from '@middleware/validation';
@@ -45,13 +45,13 @@ export const makeUsersRouter: RouterFactory = (context: Context) => {
     getUsersValidationSchema,
     getUsersController(context),
   );
-  router.get('/:id', logRequestId, userIdValidationSchema, getUserController(context));
+  router.get('/:id', logRequestId, paramIdValidationSchema, getUserController(context));
 
   router.delete(
     '/:id',
     logRequestId,
     userOwnAccount({ checkForAdmin: true }),
-    userIdValidationSchema,
+    paramIdValidationSchema,
     deleteUserController(context),
   );
 
@@ -61,7 +61,7 @@ export const makeUsersRouter: RouterFactory = (context: Context) => {
     uploadFile,
     userOwnAccount({ checkForAdmin: false }),
     checkForAllowedFields(allowedKeysForCreateUser),
-    [...userIdValidationSchema, ...createUserValidationSchema],
+    [...paramIdValidationSchema, ...createUserValidationSchema],
     updateUserController(context),
   );
 

@@ -22,6 +22,13 @@ export class ExperienceService {
     });
   }
 
+  async getExperienceById(selectFields: string[], id: number) {
+    return this.experienceModel.findOne({
+      where: { id },
+      attributes: selectFields,
+    });
+  }
+
   async deleteUserExperiences(userId: number, transaction: Transaction) {
     return this.experienceModel.destroy({
       where: { userId },

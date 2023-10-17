@@ -7,3 +7,4 @@ export { default as deleteUserController } from './users/deleteUser.controller';
 export { default as updateUserController } from './users/updateUser.controller';
 export { default as createExperienceController } from './experience/createExperience.controller';
 export { default as getExperiencesContoller } from './experience/getExperiences.contoller';
+export { default as getExperienceContoller } from './experience/getExperience.controller';
