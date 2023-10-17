@@ -2,7 +2,7 @@ import { DataTypes, Model, Optional, Sequelize } from 'sequelize';
 
 import { Models } from '@interfaces/general';
 
-interface FeedBackAttributes {
+export interface FeedBackAttributes {
   id: number;
   fromUser: number;
   toUser: number;

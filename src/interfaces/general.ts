@@ -1,15 +1,14 @@
 import express from 'express';
 
 import { User, Project, FeedBack, Experience } from '@models/index';
-import { AuthService } from '@services/auth.service';
-import { UsersService } from '@services/users.service';
-import { ExperienceService } from '@services/experience.service';
+import { AuthService, UsersService, ExperienceService, FeedbackService } from '@services/index';
 
 export interface Context {
   services: {
     authService: AuthService;
     usersService: UsersService;
     experienceService: ExperienceService;
+    feedbackService: FeedbackService;
   };
 }
 
