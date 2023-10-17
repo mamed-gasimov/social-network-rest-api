@@ -4,9 +4,14 @@ import { Context, RouterFactory } from '@interfaces/general';
 import { logRequestId } from '@middleware/logger/logRequestId';
 import { roles } from '@middleware/roles/checkRole';
 import { UserRole } from '@models/user.model';
-import { checkForAllowedFields, createExperienceValidationSchema } from '@middleware/validation';
-import createExperienceController from '@controllers/experience/createExperience.controller';
+import {
+  checkForAllowedFields,
+  createExperienceValidationSchema,
+  getExperiencesValidationSchema,
+} from '@middleware/validation';
+import { createExperienceController, getExperiencesContoller } from '@controllers/index';
 import { allowedKeysForCreateExperience } from '@interfaces/experience/createExperience';
+import { allowedKeysForGetExperiences } from '@interfaces/experience/getExperinces';
 
 export const makeExperienceRouter: RouterFactory = (context: Context) => {
   const router = express.Router();
@@ -18,6 +23,15 @@ export const makeExperienceRouter: RouterFactory = (context: Context) => {
     checkForAllowedFields(allowedKeysForCreateExperience),
     createExperienceValidationSchema,
     createExperienceController(context),
+  );
+
+  router.get(
+    '/',
+    logRequestId,
+    roles([UserRole.Admin]),
+    checkForAllowedFields(allowedKeysForGetExperiences, true),
+    getExperiencesValidationSchema,
+    getExperiencesContoller(context),
   );
 
   return router;

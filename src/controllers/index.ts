@@ -5,4 +5,5 @@ export { default as getUserController } from './users/getUser.controller';
 export { default as getUsersController } from './users/getUsers.controller';
 export { default as deleteUserController } from './users/deleteUser.controller';
 export { default as updateUserController } from './users/updateUser.controller';
-export { default as createExperience } from './experience/createExperience.controller';
+export { default as createExperienceController } from './experience/createExperience.controller';
+export { default as getExperiencesContoller } from './experience/getExperiences.contoller';

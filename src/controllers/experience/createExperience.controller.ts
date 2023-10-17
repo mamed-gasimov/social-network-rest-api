@@ -5,6 +5,7 @@ import { ExtendedRequest } from '@interfaces/express';
 import { logger } from '@libs/logger';
 import { Context, HTTP_STATUSES } from '@interfaces/general';
 import { CreateExperienceRequestBody } from '@interfaces/experience/createExperience';
+import { UserRole } from '@models/user.model';
 
 const createExperienceController = (context: Context) => async (req: ExtendedRequest, res: Response) => {
   try {
@@ -18,6 +19,12 @@ const createExperienceController = (context: Context) => async (req: ExtendedReq
     const {
       services: { experienceService, authService },
     } = context;
+
+    const { role: userRole, id } = req.user as { id: number; role: UserRole };
+    if (userRole !== UserRole.Admin && id !== +req.body.userId) {
+      logger.error('Only admin can create experience for other user');
+      return res.status(HTTP_STATUSES.FORBIDDEN).json({ message: 'Only admin can create experience for other user' });
+    }
 
     const foundUser = await authService.findUserById(req.body.userId);
 

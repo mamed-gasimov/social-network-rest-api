@@ -10,4 +10,13 @@ export class ExperienceService {
   async createExperience(experience: Omit<ExperienceAttributes, 'id'>) {
     this.experienceModel.create(experience);
   }
+
+  async getExperiences(selectFields: string[], offset: number, limit: number) {
+    return this.experienceModel.findAndCountAll({
+      attributes: selectFields,
+      offset,
+      limit,
+      order: [['id', 'DESC']],
+    });
+  }
 }
