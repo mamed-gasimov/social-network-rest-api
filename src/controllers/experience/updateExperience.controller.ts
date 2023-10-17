@@ -38,7 +38,7 @@ const updateExperienceController = (context: Context) => async (req: ExtendedReq
 
     if (foundExperience.userId !== +req.body.userId) {
       logger.error('Forbidden action. You can not change userId field');
-      return res.status(HTTP_STATUSES.FORBIDDEN).json({ message: 'You can not change userId field' });
+      return res.status(HTTP_STATUSES.FORBIDDEN).json({ message: "You can not change 'userId' field" });
     }
 
     const updatedExperience = {

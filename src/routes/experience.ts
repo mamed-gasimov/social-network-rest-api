@@ -15,6 +15,7 @@ import {
   getExperiencesContoller,
   getExperienceContoller,
   updateExperienceController,
+  deleteExperienceController,
 } from '@controllers/index';
 import { allowedKeysForCreateExperience } from '@interfaces/experience/createExperience';
 import { allowedKeysForGetExperiences } from '@interfaces/experience/getExperinces';
@@ -48,6 +49,8 @@ export const makeExperienceRouter: RouterFactory = (context: Context) => {
     [...paramIdValidationSchema, ...createExperienceValidationSchema],
     updateExperienceController(context),
   );
+
+  router.delete('/:id', logRequestId, paramIdValidationSchema, deleteExperienceController(context));
 
   return router;
 };

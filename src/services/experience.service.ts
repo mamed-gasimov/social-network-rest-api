@@ -42,4 +42,10 @@ export class ExperienceService {
       transaction,
     });
   }
+
+  async deleteExperienceById(id: number) {
+    return this.experienceModel.destroy({
+      where: { id },
+    });
+  }
 }
