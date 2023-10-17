@@ -5,7 +5,7 @@ const tomorrow = new Date(today);
 tomorrow.setDate(today.getDate() + 1);
 
 export const createExperienceValidationSchema = [
-  body('userId').isInt({ gt: 0 }).escape().notEmpty().withMessage('"userId" is required'),
+  body('userId').escape().notEmpty().withMessage('"userId" is required').isInt({ gt: 0 }),
   body('companyName').trim().escape().notEmpty().withMessage('"companyName" is required'),
   body('role').trim().escape().notEmpty().withMessage('"role" is required'),
   body('startDate')

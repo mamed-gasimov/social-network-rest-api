@@ -24,11 +24,11 @@ const getExperienceController = (context: Context) => async (req: ExtendedReques
     const foundExperience = await experienceService.getExperienceById(selectFields, id);
 
     if (!foundExperience) {
-      logger.error('User experience was not found');
-      return res.status(HTTP_STATUSES.NOT_FOUND).json({ message: 'User experience was not found' });
+      logger.error('Experience was not found');
+      return res.status(HTTP_STATUSES.NOT_FOUND).json({ message: 'Experience was not found' });
     }
 
-    logger.info('User experience was found successfully');
+    logger.info('Experience was found successfully');
     return res.status(HTTP_STATUSES.OK).json(foundExperience);
   } catch (error) {
     logger.error(error);

@@ -10,7 +10,12 @@ import {
   getExperiencesValidationSchema,
   paramIdValidationSchema,
 } from '@middleware/validation';
-import { createExperienceController, getExperiencesContoller, getExperienceContoller } from '@controllers/index';
+import {
+  createExperienceController,
+  getExperiencesContoller,
+  getExperienceContoller,
+  updateExperienceController,
+} from '@controllers/index';
 import { allowedKeysForCreateExperience } from '@interfaces/experience/createExperience';
 import { allowedKeysForGetExperiences } from '@interfaces/experience/getExperinces';
 
@@ -35,6 +40,13 @@ export const makeExperienceRouter: RouterFactory = (context: Context) => {
     checkForAllowedFields(allowedKeysForGetExperiences, true),
     getExperiencesValidationSchema,
     getExperiencesContoller(context),
+  );
+
+  router.put(
+    '/:id',
+    logRequestId,
+    [...paramIdValidationSchema, ...createExperienceValidationSchema],
+    updateExperienceController(context),
   );
 
   return router;

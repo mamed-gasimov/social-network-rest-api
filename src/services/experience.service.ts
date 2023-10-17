@@ -1,6 +1,7 @@
 import { Transaction } from 'sequelize';
 
 import { Experience, ExperienceAttributes } from '@models/experience.model';
+import { CreateExperienceRequestBody } from '@interfaces/experience/createExperience';
 
 export class ExperienceService {
   private experienceModel: typeof Experience;
@@ -26,6 +27,12 @@ export class ExperienceService {
     return this.experienceModel.findOne({
       where: { id },
       attributes: selectFields,
+    });
+  }
+
+  async updateExperience(id: number, data: CreateExperienceRequestBody) {
+    return this.experienceModel.update(data, {
+      where: { id },
     });
   }
 
