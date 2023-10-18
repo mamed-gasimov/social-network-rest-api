@@ -11,7 +11,7 @@ import {
   paramIdValidationSchema,
   queryForPaginationValidationSchema,
 } from '@middleware/validation';
-import { createFeedbackController } from '@controllers/index';
+import { createFeedbackController, deleteFeedbackController } from '@controllers/index';
 
 export const makeFeedbackRouter: RouterFactory = (context: Context) => {
   const router = express.Router();
@@ -30,7 +30,7 @@ export const makeFeedbackRouter: RouterFactory = (context: Context) => {
 
   router.put('/:id', logRequestId, [...paramIdValidationSchema, ...createFeedbackValidationSchema]);
 
-  router.delete('/:id', logRequestId, paramIdValidationSchema);
+  router.delete('/:id', logRequestId, paramIdValidationSchema, deleteFeedbackController(context));
 
   return router;
 };
