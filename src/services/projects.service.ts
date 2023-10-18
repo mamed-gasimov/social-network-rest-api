@@ -9,7 +9,7 @@ export class ProjectsService {
   }
 
   async createProject(project: Omit<ProjectAttributes, 'id'>) {
-    this.projectModel.create(project);
+    return this.projectModel.create(project);
   }
 
   async getProjects(selectFields: string[], offset: number, limit: number) {

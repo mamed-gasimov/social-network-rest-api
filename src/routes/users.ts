@@ -58,7 +58,7 @@ export const makeUsersRouter: RouterFactory = (context: Context) => {
   router.put(
     '/:id',
     logRequestId,
-    uploadFile,
+    uploadFile('avatar'),
     userOwnAccount({ checkForAdmin: false }),
     checkForAllowedFields(allowedKeysForCreateUser),
     [...paramIdValidationSchema, ...createUserValidationSchema],

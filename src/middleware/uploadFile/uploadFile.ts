@@ -5,8 +5,10 @@ import { HTTP_STATUSES } from '@interfaces/general';
 import { logger } from '@libs/logger';
 import { upload } from '@libs/multer';
 
-export const uploadFile = (req: Request, res: Response, next: NextFunction) => {
-  upload(req, res, (err) => {
+export type FieldName = 'avatar' | 'projectImage';
+
+export const uploadFile = (fieldName: FieldName) => (req: Request, res: Response, next: NextFunction) => {
+  upload(fieldName)(req, res, (err) => {
     if (err instanceof MulterError) {
       if (err.code === 'LIMIT_FILE_SIZE') {
         logger.error('File is too large');

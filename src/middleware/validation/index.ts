@@ -10,3 +10,5 @@ export { createUserValidationSchema } from './users/createUser';
 export { createExperienceValidationSchema } from './experience/createExperience';
 
 export { createFeedbackValidationSchema } from './feedback/createFeedback';
+
+export { createProjectValidationSchema } from './projects/createProject';

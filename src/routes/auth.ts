@@ -16,7 +16,7 @@ export const makeAuthRouter: RouterFactory = (context: Context) => {
   router.post(
     '/register',
     logRequestId,
-    uploadFile,
+    uploadFile('avatar'),
     checkForAllowedFields(allowedKeysForRegister),
     registerValidationSchema,
     registerController(context),
