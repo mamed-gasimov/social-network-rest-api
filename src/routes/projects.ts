@@ -4,19 +4,32 @@ import { Context, RouterFactory } from '@interfaces/general';
 import { logRequestId } from '@middleware/logger/logRequestId';
 import { roles } from '@middleware/roles/checkRole';
 import { UserRole } from '@models/user.model';
-import { paramIdValidationSchema, queryForPaginationValidationSchema } from '@middleware/validation';
+import {
+  checkForAllowedFields,
+  paramIdValidationSchema,
+  queryForPaginationValidationSchema,
+} from '@middleware/validation';
+import { deleteProjectController, getProjectController, getProjectsController } from '@controllers/index';
+import { allowedKeysForGetResourceWithPagination } from '@interfaces/paginationQuery';
 
 export const makeProjectsRouter: RouterFactory = (context: Context) => {
   const router = express.Router();
 
   router.post('/', logRequestId, roles([UserRole.Admin, UserRole.User]));
 
-  router.get('/', logRequestId, roles([UserRole.Admin]), queryForPaginationValidationSchema);
-  router.get('/:id', logRequestId, paramIdValidationSchema);
+  router.get(
+    '/',
+    logRequestId,
+    roles([UserRole.Admin]),
+    checkForAllowedFields(allowedKeysForGetResourceWithPagination, true),
+    queryForPaginationValidationSchema,
+    getProjectsController(context),
+  );
+  router.get('/:id', logRequestId, paramIdValidationSchema, getProjectController(context));
 
   router.put('/:id', logRequestId, [...paramIdValidationSchema]);
 
-  router.delete('/:id', logRequestId, paramIdValidationSchema);
+  router.delete('/:id', logRequestId, paramIdValidationSchema, deleteProjectController(context));
 
   return router;
 };
