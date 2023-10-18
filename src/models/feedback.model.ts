@@ -6,7 +6,7 @@ export interface FeedBackAttributes {
   id: number;
   fromUser: number;
   toUser: number;
-  content: string;
+  context: string;
   companyName: string;
 }
 
@@ -20,7 +20,7 @@ export class FeedBack
 
   toUser: number;
 
-  content: string;
+  context: string;
 
   companyName: string;
 
@@ -46,7 +46,7 @@ export class FeedBack
           type: DataTypes.INTEGER.UNSIGNED,
           allowNull: false,
         },
-        content: {
+        context: {
           type: new DataTypes.TEXT('long'),
           allowNull: false,
         },

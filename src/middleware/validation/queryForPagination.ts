@@ -1,6 +1,6 @@
 import { query } from 'express-validator';
 
-export const getExperiencesValidationSchema = [
+export const queryForPaginationValidationSchema = [
   query('pageSize')
     .escape()
     .notEmpty()

@@ -35,10 +35,10 @@ const createExperienceController = (context: Context) => async (req: ExtendedReq
 
     const { userId, companyName, role, startDate, endDate, description } = req.body as CreateExperienceRequestBody;
     const newExperience = { userId, companyName, role, startDate, endDate, description };
-    await experienceService.createExperience(newExperience);
+    const createdExperience = await experienceService.createExperience(newExperience);
 
     logger.info('Experience was successfully created');
-    return res.status(HTTP_STATUSES.CREATED).json();
+    return res.status(HTTP_STATUSES.CREATED).json(createdExperience);
   } catch (error) {
     logger.error(error);
     return res.status(HTTP_STATUSES.INTERNAL_SERVER_ERROR).json({ message: 'Something went wrong on the server.' });

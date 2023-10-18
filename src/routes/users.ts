@@ -13,7 +13,7 @@ import { logRequestId } from '@middleware/logger/logRequestId';
 import {
   createUserValidationSchema,
   paramIdValidationSchema,
-  getUsersValidationSchema,
+  queryForPaginationValidationSchema,
   checkForAllowedFields,
 } from '@middleware/validation';
 import { roles } from '@middleware/roles/checkRole';
@@ -42,7 +42,7 @@ export const makeUsersRouter: RouterFactory = (context: Context) => {
     logRequestId,
     roles([UserRole.Admin]),
     checkForAllowedFields(allowedKeysForGetUsers, true),
-    getUsersValidationSchema,
+    queryForPaginationValidationSchema,
     getUsersController(context),
   );
   router.get('/:id', logRequestId, paramIdValidationSchema, getUserController(context));

@@ -7,7 +7,7 @@ import { UserRole } from '@models/user.model';
 import {
   checkForAllowedFields,
   createExperienceValidationSchema,
-  getExperiencesValidationSchema,
+  queryForPaginationValidationSchema,
   paramIdValidationSchema,
 } from '@middleware/validation';
 import {
@@ -39,7 +39,7 @@ export const makeExperienceRouter: RouterFactory = (context: Context) => {
     logRequestId,
     roles([UserRole.Admin]),
     checkForAllowedFields(allowedKeysForGetExperiences, true),
-    getExperiencesValidationSchema,
+    queryForPaginationValidationSchema,
     getExperiencesContoller(context),
   );
 
