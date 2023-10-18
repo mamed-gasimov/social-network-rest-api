@@ -11,7 +11,13 @@ import {
   paramIdValidationSchema,
   queryForPaginationValidationSchema,
 } from '@middleware/validation';
-import { createFeedbackController, deleteFeedbackController } from '@controllers/index';
+import {
+  createFeedbackController,
+  getFeedbackController,
+  getFeedbacksController,
+  deleteFeedbackController,
+} from '@controllers/index';
+import { allowedKeysForGetResourceWithPagination } from '@interfaces/paginationQuery';
 
 export const makeFeedbackRouter: RouterFactory = (context: Context) => {
   const router = express.Router();
@@ -25,8 +31,15 @@ export const makeFeedbackRouter: RouterFactory = (context: Context) => {
     createFeedbackController(context),
   );
 
-  router.get('/', logRequestId, roles([UserRole.Admin]), queryForPaginationValidationSchema);
-  router.get('/:id', logRequestId, paramIdValidationSchema);
+  router.get(
+    '/',
+    logRequestId,
+    roles([UserRole.Admin]),
+    checkForAllowedFields(allowedKeysForGetResourceWithPagination, true),
+    queryForPaginationValidationSchema,
+    getFeedbacksController(context),
+  );
+  router.get('/:id', logRequestId, paramIdValidationSchema, getFeedbackController(context));
 
   router.put('/:id', logRequestId, [...paramIdValidationSchema, ...createFeedbackValidationSchema]);
 

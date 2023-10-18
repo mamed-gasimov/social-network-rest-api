@@ -28,10 +28,10 @@ const createFeedbackController = (context: Context) => async (req: ExtendedReque
 
     const { fromUser, companyName, toUser, context: feedbackDescription } = req.body as CreateFeedbackRequestBody;
     const newFeedback = { companyName, context: feedbackDescription, toUser, fromUser };
-    const createFeedback = await feedbackService.createFeedback(newFeedback);
+    const { id } = await feedbackService.createFeedback(newFeedback);
 
     logger.info('Feedback was successfully created');
-    return res.status(HTTP_STATUSES.CREATED).json(createFeedback);
+    return res.status(HTTP_STATUSES.CREATED).json({ id, ...newFeedback });
   } catch (error) {
     logger.error(error);
     return res.status(HTTP_STATUSES.INTERNAL_SERVER_ERROR).json({ message: 'Something went wrong on the server.' });

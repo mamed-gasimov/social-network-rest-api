@@ -18,7 +18,7 @@ import {
   deleteExperienceController,
 } from '@controllers/index';
 import { allowedKeysForCreateExperience } from '@interfaces/experience/createExperience';
-import { allowedKeysForGetExperiences } from '@interfaces/experience/getExperinces';
+import { allowedKeysForGetResourceWithPagination } from '@interfaces/paginationQuery';
 
 export const makeExperienceRouter: RouterFactory = (context: Context) => {
   const router = express.Router();
@@ -38,7 +38,7 @@ export const makeExperienceRouter: RouterFactory = (context: Context) => {
     '/',
     logRequestId,
     roles([UserRole.Admin]),
-    checkForAllowedFields(allowedKeysForGetExperiences, true),
+    checkForAllowedFields(allowedKeysForGetResourceWithPagination, true),
     queryForPaginationValidationSchema,
     getExperiencesContoller(context),
   );

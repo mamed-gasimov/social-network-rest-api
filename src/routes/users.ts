@@ -21,7 +21,7 @@ import { UserRole } from '@models/user.model';
 import { userOwnAccount } from '@middleware/roles/userOwnAccount';
 import { uploadFile } from '@middleware/uploadFile/uploadFile';
 import { allowedKeysForCreateUser } from '@interfaces/users/createUser';
-import { allowedKeysForGetUsers } from '@interfaces/users/getUsers';
+import { allowedKeysForGetResourceWithPagination } from '@interfaces/paginationQuery';
 
 export const makeUsersRouter: RouterFactory = (context: Context) => {
   const router = express.Router();
@@ -41,7 +41,7 @@ export const makeUsersRouter: RouterFactory = (context: Context) => {
     '/',
     logRequestId,
     roles([UserRole.Admin]),
-    checkForAllowedFields(allowedKeysForGetUsers, true),
+    checkForAllowedFields(allowedKeysForGetResourceWithPagination, true),
     queryForPaginationValidationSchema,
     getUsersController(context),
   );

@@ -4,7 +4,7 @@ import { validationResult } from 'express-validator';
 import { ExtendedRequest } from '@interfaces/express';
 import { logger } from '@libs/logger';
 import { Context, HTTP_STATUSES } from '@interfaces/general';
-import { GetExperiencesRequestQuery } from '@interfaces/experience/getExperinces';
+import { GetResourceRequestQuery } from '@interfaces/paginationQuery';
 
 const getExperiencesController = (context: Context) => async (req: ExtendedRequest, res: Response) => {
   try {
@@ -15,7 +15,7 @@ const getExperiencesController = (context: Context) => async (req: ExtendedReque
       return res.status(HTTP_STATUSES.BAD_REQUEST).json({ message: errors.array()?.[0]?.msg });
     }
 
-    const { page, pageSize } = req.query as unknown as GetExperiencesRequestQuery;
+    const { page, pageSize } = req.query as unknown as GetResourceRequestQuery;
 
     const {
       services: { experienceService },

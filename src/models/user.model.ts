@@ -104,7 +104,13 @@ export class User extends Model<UserAttributes, Optional<UserAttributes, 'id'>> 
       foreignKey: 'user_id',
     });
 
-    User.hasMany(models.feedback);
+    User.hasMany(models.feedback, {
+      foreignKey: 'to_user',
+    });
+
+    User.hasMany(models.feedback, {
+      foreignKey: 'from_user',
+    });
 
     sequelize.sync();
   }

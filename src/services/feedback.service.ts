@@ -9,7 +9,7 @@ export class FeedbackService {
   }
 
   async createFeedback(feedback: Omit<FeedBackAttributes, 'id'>) {
-    this.feedbackModel.create(feedback);
+    return this.feedbackModel.create(feedback);
   }
 
   async getFeedbacks(selectFields: string[], offset: number, limit: number) {

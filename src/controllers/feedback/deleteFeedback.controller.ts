@@ -18,10 +18,9 @@ const deleteFeedbackController = (context: Context) => async (req: ExtendedReque
       services: { feedbackService },
     } = context;
 
-    const selectFields = ['id', 'userId'];
-    const foundExperience = await feedbackService.getFeedbackById(selectFields, +req.params.id);
-
-    if (!foundExperience) {
+    const selectFields = ['id'];
+    const foundFeedback = await feedbackService.getFeedbackById(selectFields, +req.params.id);
+    if (!foundFeedback) {
       logger.error('Feedback was not found');
       return res.status(HTTP_STATUSES.NOT_FOUND).json({ message: 'Feedback was not found' });
     }
