@@ -5,6 +5,7 @@ import { ExtendedRequest } from '@interfaces/express';
 import { logger } from '@libs/logger';
 import { Context, HTTP_STATUSES } from '@interfaces/general';
 import { GetResourceRequestQuery } from '@interfaces/paginationQuery';
+import { allowedKeysForCreateExperience } from '@interfaces/experience/createExperience';
 
 const getExperiencesController = (context: Context) => async (req: ExtendedRequest, res: Response) => {
   try {
@@ -21,7 +22,7 @@ const getExperiencesController = (context: Context) => async (req: ExtendedReque
       services: { experienceService },
     } = context;
 
-    const selectFields = ['id', 'userId', 'companyName', 'role', 'startDate', 'endDate', 'description'];
+    const selectFields = ['id', ...Object.keys(allowedKeysForCreateExperience)];
     const skip = (page - 1) * pageSize;
     const { rows, count } = await experienceService.getExperiences(selectFields, +skip, +pageSize);
 

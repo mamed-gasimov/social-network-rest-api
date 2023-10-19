@@ -16,6 +16,7 @@ export { default as deleteExperienceController } from './experience/deleteExperi
 export { default as createFeedbackController } from './feedback/createFeedback.controller';
 export { default as getFeedbackController } from './feedback/getFeedback.controller';
 export { default as getFeedbacksController } from './feedback/getFeedbacks.controller';
+export { default as updateFeedbackController } from './feedback/updateFeedback.controller';
 export { default as deleteFeedbackController } from './feedback/deleteFeedback.controller';
 
 export { default as createProjectController } from './projects/createProject.controller';

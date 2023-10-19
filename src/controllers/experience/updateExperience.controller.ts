@@ -4,7 +4,7 @@ import { validationResult } from 'express-validator';
 import { ExtendedRequest } from '@interfaces/express';
 import { logger } from '@libs/logger';
 import { Context, HTTP_STATUSES } from '@interfaces/general';
-import { CreateExperienceRequestBody } from '@interfaces/experience/createExperience';
+import { CreateExperienceRequestBody, allowedKeysForCreateExperience } from '@interfaces/experience/createExperience';
 import { UserRole } from '@models/user.model';
 
 const updateExperienceController = (context: Context) => async (req: ExtendedRequest, res: Response) => {
@@ -22,7 +22,7 @@ const updateExperienceController = (context: Context) => async (req: ExtendedReq
 
     const { companyName, role, startDate, endDate, description } = req.body as CreateExperienceRequestBody;
 
-    const selectFields = ['id', 'userId', 'companyName', 'role', 'startDate', 'endDate', 'description'];
+    const selectFields = ['id', ...Object.keys(allowedKeysForCreateExperience)];
     const foundExperience = await experienceService.getExperienceById(selectFields, +req.params.id);
 
     if (!foundExperience) {

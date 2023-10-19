@@ -4,6 +4,7 @@ import { validationResult } from 'express-validator';
 import { ExtendedRequest } from '@interfaces/express';
 import { logger } from '@libs/logger';
 import { Context, HTTP_STATUSES } from '@interfaces/general';
+import { allowedKeysForCreateProject } from '@interfaces/projects/createProject';
 
 const getProjectController = (context: Context) => async (req: ExtendedRequest, res: Response) => {
   try {
@@ -18,7 +19,7 @@ const getProjectController = (context: Context) => async (req: ExtendedRequest, 
       services: { projectsService },
     } = context;
 
-    const selectFields = ['id', 'userId', 'image', 'description'];
+    const selectFields = ['id', ...Object.keys(allowedKeysForCreateProject)];
     const foundProject = await projectsService.getProjectById(selectFields, +req.params.id);
     if (!foundProject) {
       logger.error('Project was not found');

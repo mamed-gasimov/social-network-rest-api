@@ -4,6 +4,7 @@ import { validationResult } from 'express-validator';
 import { ExtendedRequest } from '@interfaces/express';
 import { logger } from '@libs/logger';
 import { Context, HTTP_STATUSES } from '@interfaces/general';
+import { allowedKeysForCreateFeedback } from '@interfaces/feedback/createFeedback';
 
 const getFeedbackController = (context: Context) => async (req: ExtendedRequest, res: Response) => {
   try {
@@ -18,7 +19,7 @@ const getFeedbackController = (context: Context) => async (req: ExtendedRequest,
       services: { feedbackService },
     } = context;
 
-    const selectFields = ['id', 'fromUser', 'toUser', 'context', 'companyName'];
+    const selectFields = ['id', ...Object.keys(allowedKeysForCreateFeedback)];
     const foundFeedback = await feedbackService.getFeedbackById(selectFields, +req.params.id);
     if (!foundFeedback) {
       logger.error('Feedback was not found');

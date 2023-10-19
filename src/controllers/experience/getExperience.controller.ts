@@ -4,6 +4,7 @@ import { validationResult } from 'express-validator';
 import { ExtendedRequest } from '@interfaces/express';
 import { logger } from '@libs/logger';
 import { Context, HTTP_STATUSES } from '@interfaces/general';
+import { allowedKeysForCreateExperience } from '@interfaces/experience/createExperience';
 
 const getExperienceController = (context: Context) => async (req: ExtendedRequest, res: Response) => {
   try {
@@ -20,7 +21,7 @@ const getExperienceController = (context: Context) => async (req: ExtendedReques
       services: { experienceService },
     } = context;
 
-    const selectFields = ['id', 'userId', 'companyName', 'role', 'startDate', 'endDate', 'description'];
+    const selectFields = ['id', ...Object.keys(allowedKeysForCreateExperience)];
     const foundExperience = await experienceService.getExperienceById(selectFields, id);
 
     if (!foundExperience) {

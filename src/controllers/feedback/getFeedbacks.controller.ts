@@ -5,6 +5,7 @@ import { ExtendedRequest } from '@interfaces/express';
 import { logger } from '@libs/logger';
 import { Context, HTTP_STATUSES } from '@interfaces/general';
 import { GetResourceRequestQuery } from '@interfaces/paginationQuery';
+import { allowedKeysForCreateFeedback } from '@interfaces/feedback/createFeedback';
 
 const getFeedbacksController = (context: Context) => async (req: ExtendedRequest, res: Response) => {
   try {
@@ -21,7 +22,7 @@ const getFeedbacksController = (context: Context) => async (req: ExtendedRequest
       services: { feedbackService },
     } = context;
 
-    const selectFields = ['id', 'fromUser', 'toUser', 'context', 'companyName'];
+    const selectFields = ['id', ...Object.keys(allowedKeysForCreateFeedback)];
     const skip = (page - 1) * pageSize;
     const { rows, count } = await feedbackService.getFeedbacks(selectFields, +skip, +pageSize);
 

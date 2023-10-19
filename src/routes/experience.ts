@@ -46,6 +46,7 @@ export const makeExperienceRouter: RouterFactory = (context: Context) => {
   router.put(
     '/:id',
     logRequestId,
+    checkForAllowedFields(allowedKeysForCreateExperience),
     [...paramIdValidationSchema, ...createExperienceValidationSchema],
     updateExperienceController(context),
   );

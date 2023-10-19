@@ -16,6 +16,7 @@ import {
   getFeedbackController,
   getFeedbacksController,
   deleteFeedbackController,
+  updateFeedbackController,
 } from '@controllers/index';
 import { allowedKeysForGetResourceWithPagination } from '@interfaces/paginationQuery';
 
@@ -41,7 +42,13 @@ export const makeFeedbackRouter: RouterFactory = (context: Context) => {
   );
   router.get('/:id', logRequestId, paramIdValidationSchema, getFeedbackController(context));
 
-  router.put('/:id', logRequestId, [...paramIdValidationSchema, ...createFeedbackValidationSchema]);
+  router.put(
+    '/:id',
+    logRequestId,
+    checkForAllowedFields(allowedKeysForCreateFeedback),
+    [...paramIdValidationSchema, ...createFeedbackValidationSchema],
+    updateFeedbackController(context),
+  );
 
   router.delete('/:id', logRequestId, paramIdValidationSchema, deleteFeedbackController(context));
 
