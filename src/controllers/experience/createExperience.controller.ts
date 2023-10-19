@@ -20,10 +20,10 @@ const createExperienceController = (context: Context) => async (req: ExtendedReq
       services: { experienceService, authService },
     } = context;
 
-    const { role: userRole, id } = req.user as { id: number; role: UserRole };
-    if (userRole !== UserRole.Admin && id !== +req.body.userId) {
-      logger.error('Only admin can create experience for other user');
-      return res.status(HTTP_STATUSES.FORBIDDEN).json({ message: 'Only admin can create experience for other user' });
+    const { id: currentUserId } = req.user as { id: number; role: UserRole };
+    if (currentUserId !== +req.body.userId) {
+      logger.error('You can not create experience for another user');
+      return res.status(HTTP_STATUSES.FORBIDDEN).json({ message: 'You can not create experience for another user' });
     }
 
     const foundUser = await authService.findUserById(req.body.userId);

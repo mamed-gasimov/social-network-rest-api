@@ -15,6 +15,12 @@ const createFeedbackController = (context: Context) => async (req: ExtendedReque
       return res.status(HTTP_STATUSES.BAD_REQUEST).json({ message: errors.array()?.[0]?.msg });
     }
 
+    const { id: currentUserId } = req.user as { id: number };
+    if (currentUserId !== +req.body.fromUser || +req.body.fromUser === +req.body.toUser) {
+      logger.error('Forbidden action.');
+      return res.status(HTTP_STATUSES.FORBIDDEN).json();
+    }
+
     const {
       services: { feedbackService, authService },
     } = context;

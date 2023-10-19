@@ -19,6 +19,12 @@ const createProjectController = (context: Context) => async (req: ExtendedReques
       services: { projectsService, authService },
     } = context;
 
+    const { id: currentUserId } = req.user as { id: number };
+    if (currentUserId !== +req.body.userId) {
+      logger.error('You can not create project for another user');
+      return res.status(HTTP_STATUSES.FORBIDDEN).json({ message: 'You can not create project for another user' });
+    }
+
     if (!req.file) {
       logger.error('Project image file is required');
       return res.status(HTTP_STATUSES.NOT_FOUND).json({ message: 'Project image file is required' });

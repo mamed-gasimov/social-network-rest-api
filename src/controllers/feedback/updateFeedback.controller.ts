@@ -22,18 +22,18 @@ const updateFeedbackController = (context: Context) => async (req: ExtendedReque
 
     const { fromUser, companyName, toUser, context: feedbackDescription } = req.body as CreateFeedbackRequestBody;
 
+    const { id, role: userRole } = req.user as { id: number; role: UserRole };
+    if (+fromUser !== id && userRole !== UserRole.Admin) {
+      logger.error("Forbidden action. Only admin can update other user's feedback.");
+      return res.status(HTTP_STATUSES.FORBIDDEN).json({ message: "Only admin can update other user's feedback." });
+    }
+
     const selectFields = ['id', ...Object.keys(allowedKeysForCreateFeedback)];
     const foundFeedback = await feedbackService.getFeedbackById(selectFields, +req.params.id);
 
     if (!foundFeedback) {
       logger.error('Feedback was not found');
       return res.status(HTTP_STATUSES.NOT_FOUND).json({ message: 'Feedback was not found' });
-    }
-
-    const { id, role: userRole } = req.user as { id: number; role: UserRole };
-    if (foundFeedback.fromUser !== id && userRole !== UserRole.Admin) {
-      logger.error("Forbidden action. Only admin can update other user's feedback.");
-      return res.status(HTTP_STATUSES.FORBIDDEN).json({ message: "Only admin can update other user's feedback." });
     }
 
     if (foundFeedback.fromUser !== +fromUser || foundFeedback.toUser !== +toUser) {

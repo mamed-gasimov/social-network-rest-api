@@ -4,6 +4,7 @@ import { validationResult } from 'express-validator';
 import { ExtendedRequest } from '@interfaces/express';
 import { logger } from '@libs/logger';
 import { Context, HTTP_STATUSES } from '@interfaces/general';
+import { UserRole } from '@models/user.model';
 
 const deleteProjectController = (context: Context) => async (req: ExtendedRequest, res: Response) => {
   try {
@@ -18,18 +19,20 @@ const deleteProjectController = (context: Context) => async (req: ExtendedReques
       services: { projectsService },
     } = context;
 
+    const { id, role: userRole } = req.user as { id: number; role: UserRole };
+    if (+req.body.userId !== id && userRole !== UserRole.Admin) {
+      logger.error('Forbidden action. Only admin can delete project created by another user.');
+      return res
+        .status(HTTP_STATUSES.FORBIDDEN)
+        .json({ message: 'Only admin can delete project created by another user.' });
+    }
+
     const selectFields = ['id'];
     const foundProject = await projectsService.getProjectById(selectFields, +req.params.id);
     if (!foundProject) {
       logger.error('Project was not found');
       return res.status(HTTP_STATUSES.NOT_FOUND).json({ message: 'Project was not found' });
     }
-
-    // const { id, role: userRole } = req.user as { id: number; role: UserRole };
-    // if (foundExperience.userId !== id && userRole !== UserRole.Admin) {
-    //   logger.error("Forbidden action. Only admin can delete other user's experience.");
-    //   return res.status(HTTP_STATUSES.FORBIDDEN).json({ message: "Only admin can delete other user's experience." });
-    // }
 
     await projectsService.deleteProjectById(+req.params.id);
 
