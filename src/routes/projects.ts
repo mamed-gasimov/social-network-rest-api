@@ -15,6 +15,7 @@ import {
   deleteProjectController,
   getProjectController,
   getProjectsController,
+  updateProjectController,
 } from '@controllers/index';
 import { allowedKeysForGetResourceWithPagination } from '@interfaces/paginationQuery';
 import { uploadFile } from '@middleware/uploadFile/uploadFile';
@@ -43,7 +44,13 @@ export const makeProjectsRouter: RouterFactory = (context: Context) => {
   );
   router.get('/:id', logRequestId, paramIdValidationSchema, getProjectController(context));
 
-  router.put('/:id', logRequestId, [...paramIdValidationSchema]);
+  router.put(
+    '/:id',
+    logRequestId,
+    checkForAllowedFields(allowedKeysForCreateProject),
+    [...paramIdValidationSchema, ...createProjectValidationSchema],
+    updateProjectController(context),
+  );
 
   router.delete('/:id', logRequestId, paramIdValidationSchema, deleteProjectController(context));
 

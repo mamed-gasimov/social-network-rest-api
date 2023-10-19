@@ -22,4 +22,5 @@ export { default as deleteFeedbackController } from './feedback/deleteFeedback.c
 export { default as createProjectController } from './projects/createProject.controller';
 export { default as getProjectController } from './projects/getProject.controller';
 export { default as getProjectsController } from './projects/getProjects.controller';
+export { default as updateProjectController } from './projects/updateProject.controller';
 export { default as deleteProjectController } from './projects/deleteProject.controller';
