@@ -98,14 +98,17 @@ export class User extends Model<UserAttributes, Optional<UserAttributes, 'id'>> 
   static associate(models: Models, sequelize: Sequelize) {
     User.hasMany(models.project, {
       foreignKey: 'user_id',
+      as: 'projects',
     });
 
     User.hasMany(models.experience, {
       foreignKey: 'user_id',
+      as: 'experiences',
     });
 
     User.hasMany(models.feedback, {
       foreignKey: 'to_user',
+      as: 'feedbacks',
     });
 
     User.hasMany(models.feedback, {

@@ -8,6 +8,7 @@ import {
   makeExperienceRouter,
   makeFeedbackRouter,
   makeProjectsRouter,
+  makeCVRouter,
 } from '@routes/index';
 
 export const loadRoutes = (app: express.Router, context: Context) => {
@@ -16,4 +17,5 @@ export const loadRoutes = (app: express.Router, context: Context) => {
   app.use('/api/experience', passport.authenticate('jwt', { session: false }), makeExperienceRouter(context));
   app.use('/api/feedback', passport.authenticate('jwt', { session: false }), makeFeedbackRouter(context));
   app.use('/api/projects', passport.authenticate('jwt', { session: false }), makeProjectsRouter(context));
+  app.use('/api/user', passport.authenticate('jwt', { session: false }), makeCVRouter(context));
 };

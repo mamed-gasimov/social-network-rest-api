@@ -24,3 +24,5 @@ export { default as getProjectController } from './projects/getProject.controlle
 export { default as getProjectsController } from './projects/getProjects.controller';
 export { default as updateProjectController } from './projects/updateProject.controller';
 export { default as deleteProjectController } from './projects/deleteProject.controller';
+
+export { default as getCVController } from './cv/getCV.controller';
