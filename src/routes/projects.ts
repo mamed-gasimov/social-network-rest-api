@@ -47,6 +47,7 @@ export const makeProjectsRouter: RouterFactory = (context: Context) => {
   router.put(
     '/:id',
     logRequestId,
+    uploadFile('projectImage'),
     checkForAllowedFields(allowedKeysForCreateProject),
     [...paramIdValidationSchema, ...createProjectValidationSchema],
     updateProjectController(context),

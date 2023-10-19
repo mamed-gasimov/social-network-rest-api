@@ -19,12 +19,12 @@ const getProjectsController = (context: Context) => async (req: ExtendedRequest,
     const { page, pageSize } = req.query as unknown as GetResourceRequestQuery;
 
     const {
-      services: { feedbackService },
+      services: { projectsService },
     } = context;
 
     const selectFields = ['id', ...Object.keys(allowedKeysForCreateProject)];
     const skip = (page - 1) * pageSize;
-    const { rows, count } = await feedbackService.getFeedbacks(selectFields, +skip, +pageSize);
+    const { rows, count } = await projectsService.getProjects(selectFields, +skip, +pageSize);
 
     logger.info('List of projects was successfully returned');
     return res.status(HTTP_STATUSES.OK).header('X-total-count', `${count}`).json(rows);
