@@ -1,3 +1,5 @@
+import { config as configEnv } from 'dotenv';
+
 export interface Config {
   db: {
     host: string;
@@ -22,8 +24,8 @@ const configs: {
     db: {
       host: 'localhost',
       port: 3306,
-      username: 'root',
-      password: 'root1234',
+      username: process.env.DB_USER_NAME,
+      password: process.env.DB_USER_PASSWORD,
       database: 'capstone_project',
     },
     redis: {
@@ -37,6 +39,8 @@ const configs: {
 };
 
 const getConfig = (): Config => {
+  configEnv();
+
   if (!process.env.NODE_ENV) {
     throw new Error('Env parameter NODE_ENV must be specified! Possible values are "development", ...');
   }
@@ -46,6 +50,9 @@ const getConfig = (): Config => {
   if (!configs[env]) {
     throw new Error('Unsupported NODE_ENV value was provided! Possible values are "development", ...');
   }
+
+  configs.development.db.username = process.env.DB_USER_NAME;
+  configs.development.db.password = process.env.DB_USER_PASSWORD;
 
   return configs[env];
 };
