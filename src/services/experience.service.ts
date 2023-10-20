@@ -11,7 +11,7 @@ export class ExperienceService {
   }
 
   async createExperience(experience: Omit<ExperienceAttributes, 'id'>) {
-    this.experienceModel.create(experience);
+    return this.experienceModel.create(experience);
   }
 
   async getExperiences(selectFields: string[], offset: number, limit: number) {
