@@ -1,11 +1,12 @@
-import { Response } from 'express';
+import { NextFunction, Response } from 'express';
 
 import { ExtendedRequest } from '@interfaces/express';
 import { logger } from '@libs/logger';
 import { Context, HTTP_STATUSES } from '@interfaces/general';
 import { GetUserRequestParams, GetUserResponseBody } from '@interfaces/users/getUsers';
+import { CustomError } from '@helpers/customError';
 
-const getUserController = (context: Context) => async (req: ExtendedRequest, res: Response) => {
+const getUserController = (context: Context) => async (req: ExtendedRequest, res: Response, next: NextFunction) => {
   try {
     const { id } = req.params as unknown as GetUserRequestParams;
 
@@ -35,8 +36,8 @@ const getUserController = (context: Context) => async (req: ExtendedRequest, res
     logger.info('User was found successfully');
     return res.status(HTTP_STATUSES.OK).json(resBody);
   } catch (error) {
-    logger.error(error);
-    return res.status(HTTP_STATUSES.INTERNAL_SERVER_ERROR).json({ message: 'Something went wrong on the server.' });
+    const err = new CustomError(HTTP_STATUSES.INTERNAL_SERVER_ERROR, 'Something went wrong on the server.');
+    next(err);
   }
 };
 

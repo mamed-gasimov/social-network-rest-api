@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 
 import { HTTP_STATUSES } from '@interfaces/general';
-import { logger } from '@libs/logger';
+import { CustomError } from '@helpers/customError';
 
 export const checkForAllowedFields =
   (allowedKeys: Record<string, number>, isQuery?: boolean) => (req: Request, res: Response, next: NextFunction) => {
@@ -18,8 +18,8 @@ export const checkForAllowedFields =
     });
 
     if (!onlyAllowedFields) {
-      logger.error('Invalid fields');
-      return res.status(HTTP_STATUSES.BAD_REQUEST).json({ message: 'Invalid fields' });
+      const err = new CustomError(HTTP_STATUSES.BAD_REQUEST, 'Invalid fields');
+      return next(err);
     }
 
     next();

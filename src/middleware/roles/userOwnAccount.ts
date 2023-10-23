@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 
 import { UserRole } from '@models/user.model';
 import { HTTP_STATUSES } from '@interfaces/general';
-import { logger } from '@libs/logger';
+import { CustomError } from '@helpers/customError';
 
 type CheckForAdmin = {
   checkForAdmin: boolean;
@@ -16,15 +16,15 @@ export const userOwnAccount =
 
     if (userId !== id) {
       if (checkForAdmin && role !== UserRole.Admin) {
-        logger.error('Forbidden action');
-        return res.status(HTTP_STATUSES.FORBIDDEN).json();
+        const err = new CustomError(HTTP_STATUSES.FORBIDDEN, 'Forbidden action');
+        return next(err);
       }
       if (checkForAdmin && role === UserRole.Admin) {
         return next();
       }
 
-      logger.error('Forbidden action');
-      return res.status(HTTP_STATUSES.FORBIDDEN).json();
+      const err = new CustomError(HTTP_STATUSES.FORBIDDEN, 'Forbidden action');
+      return next(err);
     }
 
     next();
