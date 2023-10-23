@@ -1,16 +1,7 @@
 import { DataTypes, Model, Optional, Sequelize } from 'sequelize';
 
 import { Models } from '@interfaces/general';
-
-export interface ExperienceAttributes {
-  id: number;
-  userId: number;
-  companyName: string;
-  role: string;
-  startDate: Date;
-  endDate: Date;
-  description: string;
-}
+import { ExperienceAttributes } from '@interfaces/experience/createExperience';
 
 export class Experience
   extends Model<ExperienceAttributes, Optional<ExperienceAttributes, 'id'>>

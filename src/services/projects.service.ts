@@ -1,5 +1,5 @@
-import { CreateProjectRequestBody } from '@interfaces/projects/createProject';
-import { Project, ProjectAttributes } from '@models/project.model';
+import { CreateProjectRequestBody, ProjectAttributes } from '@interfaces/projects/createProject';
+import { Project } from '@models/project.model';
 
 export class ProjectsService {
   private projectModel: typeof Project;

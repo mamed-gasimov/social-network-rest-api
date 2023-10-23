@@ -1,4 +1,5 @@
-import { User, UserAttributes } from '@models/user.model';
+import { UserAttributes } from '@interfaces/users/createUser';
+import { User } from '@models/user.model';
 
 export class AuthService {
   private userModel: typeof User;

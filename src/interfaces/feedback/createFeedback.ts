@@ -1,3 +1,11 @@
+export interface FeedBackAttributes {
+  id: number;
+  fromUser: number;
+  toUser: number;
+  context: string;
+  companyName: string;
+}
+
 export interface CreateFeedbackRequestBody {
   fromUser: number;
   companyName: string;

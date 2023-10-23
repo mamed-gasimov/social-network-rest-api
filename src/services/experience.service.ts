@@ -1,7 +1,7 @@
 import { Transaction } from 'sequelize';
 
-import { Experience, ExperienceAttributes } from '@models/experience.model';
-import { CreateExperienceRequestBody } from '@interfaces/experience/createExperience';
+import { Experience } from '@models/experience.model';
+import { CreateExperienceRequestBody, ExperienceAttributes } from '@interfaces/experience/createExperience';
 
 export class ExperienceService {
   private experienceModel: typeof Experience;

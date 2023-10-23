@@ -1,5 +1,5 @@
-import { CreateFeedbackRequestBody } from '@interfaces/feedback/createFeedback';
-import { FeedBack, FeedBackAttributes } from '@models/feedback.model';
+import { CreateFeedbackRequestBody, FeedBackAttributes } from '@interfaces/feedback/createFeedback';
+import { FeedBack } from '@models/feedback.model';
 
 export class FeedbackService {
   private feedbackModel: typeof FeedBack;

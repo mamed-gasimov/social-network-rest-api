@@ -1,3 +1,10 @@
+export interface ProjectAttributes {
+  id: number;
+  userId: number;
+  image: string;
+  description: string;
+}
+
 export interface CreateProjectRequestBody {
   userId: number;
   image: string;

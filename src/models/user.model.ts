@@ -1,22 +1,11 @@
 import { DataTypes, Model, Optional, Sequelize } from 'sequelize';
 
 import { Models } from '@interfaces/general';
+import { UserAttributes } from '@interfaces/users/createUser';
 
 export enum UserRole {
   Admin = 'Admin',
   User = 'User',
-}
-
-export interface UserAttributes {
-  id: number;
-  firstName: string;
-  lastName: string;
-  image: string;
-  title: string;
-  summary: string;
-  role: UserRole;
-  email: string;
-  password: string;
 }
 
 export class User extends Model<UserAttributes, Optional<UserAttributes, 'id'>> implements UserAttributes {

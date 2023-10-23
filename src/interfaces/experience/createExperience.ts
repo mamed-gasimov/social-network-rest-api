@@ -1,3 +1,13 @@
+export interface ExperienceAttributes {
+  id: number;
+  userId: number;
+  companyName: string;
+  role: string;
+  startDate: Date;
+  endDate: Date;
+  description: string;
+}
+
 export interface CreateExperienceRequestBody {
   userId: number;
   companyName: string;

@@ -9,6 +9,7 @@
     "rootDir": ".",
     "outDir": "dist",
     "baseUrl": ".",
+    "skipLibCheck": true,
     "paths": {
       "@config": ["src/config"],
       "@interfaces/*": ["src/interfaces/*"],

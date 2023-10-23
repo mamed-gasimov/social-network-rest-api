@@ -1,13 +1,7 @@
 import { DataTypes, Model, Optional, Sequelize } from 'sequelize';
 
 import { Models } from '@interfaces/general';
-
-export interface ProjectAttributes {
-  id: number;
-  userId: number;
-  image: string;
-  description: string;
-}
+import { ProjectAttributes } from '@interfaces/projects/createProject';
 
 export class Project extends Model<ProjectAttributes, Optional<ProjectAttributes, 'id'>> implements ProjectAttributes {
   id: number;

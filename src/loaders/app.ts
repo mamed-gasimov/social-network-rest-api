@@ -2,6 +2,7 @@ import express from 'express';
 import passport from 'passport';
 
 import { config } from '@config';
+import { errorHandler } from '@middleware/errorHandler/errorHandler';
 
 import { loadMiddlewares } from './middlewares';
 import { loadRoutes } from './routes';
@@ -24,6 +25,7 @@ export const loadApp = async () => {
   app.use(passport.initialize());
 
   loadRoutes(app, context);
+  app.use(errorHandler);
 
   return app;
 };

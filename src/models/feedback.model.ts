@@ -1,14 +1,7 @@
 import { DataTypes, Model, Optional, Sequelize } from 'sequelize';
 
 import { Models } from '@interfaces/general';
-
-export interface FeedBackAttributes {
-  id: number;
-  fromUser: number;
-  toUser: number;
-  context: string;
-  companyName: string;
-}
+import { FeedBackAttributes } from '@interfaces/feedback/createFeedback';
 
 export class FeedBack
   extends Model<FeedBackAttributes, Optional<FeedBackAttributes, 'id'>>

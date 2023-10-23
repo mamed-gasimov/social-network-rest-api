@@ -1,6 +1,18 @@
 import { RegisterRequestBody } from '@interfaces/auth/register';
 import { UserRole } from '@models/user.model';
 
+export interface UserAttributes {
+  id: number;
+  firstName: string;
+  lastName: string;
+  image: string;
+  title: string;
+  summary: string;
+  role: UserRole;
+  email: string;
+  password: string;
+}
+
 export interface CreateUserRequestBody extends RegisterRequestBody {
   role: UserRole;
   image?: string;
