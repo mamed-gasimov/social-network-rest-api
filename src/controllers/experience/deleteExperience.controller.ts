@@ -1,38 +1,43 @@
-import { Response } from 'express';
+import { NextFunction, Response } from 'express';
 
 import { ExtendedRequest } from '@interfaces/express';
 import { logger } from '@libs/logger';
 import { Context, HTTP_STATUSES } from '@interfaces/general';
 import { UserRole } from '@models/user.model';
+import { CustomError } from '@helpers/customError';
 
-const deleteExperienceController = (context: Context) => async (req: ExtendedRequest, res: Response) => {
-  try {
-    const {
-      services: { experienceService },
-    } = context;
+const deleteExperienceController =
+  (context: Context) => async (req: ExtendedRequest, res: Response, next: NextFunction) => {
+    try {
+      const {
+        services: { experienceService },
+      } = context;
 
-    const selectFields = ['id', 'userId'];
-    const foundExperience = await experienceService.getExperienceById(selectFields, +req.params.id);
+      const selectFields = ['id', 'userId'];
+      const foundExperience = await experienceService.getExperienceById(selectFields, +req.params.id);
 
-    if (!foundExperience) {
-      logger.error('Experience was not found');
-      return res.status(HTTP_STATUSES.NOT_FOUND).json({ message: 'Experience was not found' });
+      if (!foundExperience) {
+        const err = new CustomError(HTTP_STATUSES.NOT_FOUND, 'Experience was not found');
+        return next(err);
+      }
+
+      const { id, role: userRole } = req.user as { id: number; role: UserRole };
+      if (foundExperience.userId !== id && userRole !== UserRole.Admin) {
+        const err = new CustomError(
+          HTTP_STATUSES.FORBIDDEN,
+          'Only admin can delete experience created by another user.',
+        );
+        return next(err);
+      }
+
+      await experienceService.deleteExperienceById(+req.params.id);
+
+      logger.info('Experience was deleted successfully');
+      return res.status(HTTP_STATUSES.DELETED).json();
+    } catch (error) {
+      const err = new CustomError(HTTP_STATUSES.INTERNAL_SERVER_ERROR, 'Something went wrong on the server.');
+      next(err);
     }
-
-    const { id, role: userRole } = req.user as { id: number; role: UserRole };
-    if (foundExperience.userId !== id && userRole !== UserRole.Admin) {
-      logger.error("Forbidden action. Only admin can delete other user's experience.");
-      return res.status(HTTP_STATUSES.FORBIDDEN).json({ message: "Only admin can delete other user's experience." });
-    }
-
-    await experienceService.deleteExperienceById(+req.params.id);
-
-    logger.info('Experience was deleted successfully');
-    return res.status(HTTP_STATUSES.DELETED).json();
-  } catch (error) {
-    logger.error(error);
-    return res.status(HTTP_STATUSES.INTERNAL_SERVER_ERROR).json({ message: 'Something went wrong on the server.' });
-  }
-};
+  };
 
 export default deleteExperienceController;
