@@ -1,5 +1,4 @@
 import { Response } from 'express';
-import { validationResult } from 'express-validator';
 
 import { ExtendedRequest } from '@interfaces/express';
 import { logger } from '@libs/logger';
@@ -8,13 +7,6 @@ import { CreateFeedbackRequestBody } from '@interfaces/feedback/createFeedback';
 
 const createFeedbackController = (context: Context) => async (req: ExtendedRequest, res: Response) => {
   try {
-    const errors = validationResult(req);
-
-    if (!errors.isEmpty()) {
-      logger.error(errors.array()?.[0]?.msg);
-      return res.status(HTTP_STATUSES.BAD_REQUEST).json({ message: errors.array()?.[0]?.msg });
-    }
-
     const { id: currentUserId } = req.user as { id: number };
     if (currentUserId !== +req.body.fromUser || +req.body.fromUser === +req.body.toUser) {
       logger.error('Forbidden action.');

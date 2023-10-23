@@ -15,6 +15,7 @@ import {
   paramIdValidationSchema,
   queryForPaginationValidationSchema,
   checkForAllowedFields,
+  validate,
 } from '@middleware/validation';
 import { roles } from '@middleware/roles/checkRole';
 import { UserRole } from '@models/user.model';
@@ -34,6 +35,7 @@ export const makeUsersRouter: RouterFactory = (context: Context) => {
     upload.none(),
     checkForAllowedFields(allowedKeysForCreateUser),
     createUserValidationSchema,
+    validate,
     createUserController(context),
   );
 
@@ -43,15 +45,17 @@ export const makeUsersRouter: RouterFactory = (context: Context) => {
     roles([UserRole.Admin]),
     checkForAllowedFields(allowedKeysForGetResourceWithPagination, true),
     queryForPaginationValidationSchema,
+    validate,
     getUsersController(context),
   );
-  router.get('/:id', logRequestId, paramIdValidationSchema, getUserController(context));
+  router.get('/:id', logRequestId, paramIdValidationSchema, validate, getUserController(context));
 
   router.delete(
     '/:id',
     logRequestId,
     userOwnAccount({ checkForAdmin: true }),
     paramIdValidationSchema,
+    validate,
     deleteUserController(context),
   );
 
@@ -62,6 +66,7 @@ export const makeUsersRouter: RouterFactory = (context: Context) => {
     userOwnAccount({ checkForAdmin: false }),
     checkForAllowedFields(allowedKeysForCreateUser),
     [...paramIdValidationSchema, ...createUserValidationSchema],
+    validate,
     updateUserController(context),
   );
 

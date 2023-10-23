@@ -9,6 +9,7 @@ import {
   createProjectValidationSchema,
   paramIdValidationSchema,
   queryForPaginationValidationSchema,
+  validate,
 } from '@middleware/validation';
 import {
   createProjectController,
@@ -31,6 +32,7 @@ export const makeProjectsRouter: RouterFactory = (context: Context) => {
     uploadFile('projectImage'),
     checkForAllowedFields(allowedKeysForCreateProject),
     createProjectValidationSchema,
+    validate,
     createProjectController(context),
   );
 
@@ -40,9 +42,10 @@ export const makeProjectsRouter: RouterFactory = (context: Context) => {
     roles([UserRole.Admin]),
     checkForAllowedFields(allowedKeysForGetResourceWithPagination, true),
     queryForPaginationValidationSchema,
+    validate,
     getProjectsController(context),
   );
-  router.get('/:id', logRequestId, paramIdValidationSchema, getProjectController(context));
+  router.get('/:id', logRequestId, paramIdValidationSchema, validate, getProjectController(context));
 
   router.put(
     '/:id',
@@ -50,10 +53,11 @@ export const makeProjectsRouter: RouterFactory = (context: Context) => {
     uploadFile('projectImage'),
     checkForAllowedFields(allowedKeysForCreateProject),
     [...paramIdValidationSchema, ...createProjectValidationSchema],
+    validate,
     updateProjectController(context),
   );
 
-  router.delete('/:id', logRequestId, paramIdValidationSchema, deleteProjectController(context));
+  router.delete('/:id', logRequestId, paramIdValidationSchema, validate, deleteProjectController(context));
 
   return router;
 };

@@ -1,5 +1,4 @@
 import { Response } from 'express';
-import { validationResult } from 'express-validator';
 
 import { ExtendedRequest } from '@interfaces/express';
 import { logger } from '@libs/logger';
@@ -8,13 +7,6 @@ import { CVResponse, UserCV } from '@interfaces/cv';
 
 const getCVController = (context: Context) => async (req: ExtendedRequest, res: Response) => {
   try {
-    const errors = validationResult(req);
-
-    if (!errors.isEmpty()) {
-      logger.error(errors.array()?.[0]?.msg);
-      return res.status(HTTP_STATUSES.BAD_REQUEST).json({ message: errors.array()?.[0]?.msg });
-    }
-
     const { userId } = req.params as unknown as { userId: number };
     const {
       services: { usersService },

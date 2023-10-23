@@ -10,6 +10,7 @@ import {
   createFeedbackValidationSchema,
   paramIdValidationSchema,
   queryForPaginationValidationSchema,
+  validate,
 } from '@middleware/validation';
 import {
   createFeedbackController,
@@ -29,6 +30,7 @@ export const makeFeedbackRouter: RouterFactory = (context: Context) => {
     roles([UserRole.Admin, UserRole.User]),
     checkForAllowedFields(allowedKeysForCreateFeedback),
     createFeedbackValidationSchema,
+    validate,
     createFeedbackController(context),
   );
 
@@ -38,19 +40,21 @@ export const makeFeedbackRouter: RouterFactory = (context: Context) => {
     roles([UserRole.Admin]),
     checkForAllowedFields(allowedKeysForGetResourceWithPagination, true),
     queryForPaginationValidationSchema,
+    validate,
     getFeedbacksController(context),
   );
-  router.get('/:id', logRequestId, paramIdValidationSchema, getFeedbackController(context));
+  router.get('/:id', logRequestId, paramIdValidationSchema, validate, getFeedbackController(context));
 
   router.put(
     '/:id',
     logRequestId,
     checkForAllowedFields(allowedKeysForCreateFeedback),
     [...paramIdValidationSchema, ...createFeedbackValidationSchema],
+    validate,
     updateFeedbackController(context),
   );
 
-  router.delete('/:id', logRequestId, paramIdValidationSchema, deleteFeedbackController(context));
+  router.delete('/:id', logRequestId, paramIdValidationSchema, validate, deleteFeedbackController(context));
 
   return router;
 };

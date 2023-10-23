@@ -3,7 +3,12 @@ import multer from 'multer';
 
 import { loginController, registerController } from '@controllers/index';
 import { Context, RouterFactory } from '@interfaces/general';
-import { registerValidationSchema, loginValidationSchema, checkForAllowedFields } from '@middleware/validation';
+import {
+  registerValidationSchema,
+  loginValidationSchema,
+  checkForAllowedFields,
+  validate,
+} from '@middleware/validation';
 import { uploadFile } from '@middleware/uploadFile/uploadFile';
 import { logRequestId } from '@middleware/logger/logRequestId';
 import { allowedKeysForLogin } from '@interfaces/auth/login';
@@ -19,6 +24,7 @@ export const makeAuthRouter: RouterFactory = (context: Context) => {
     uploadFile('avatar'),
     checkForAllowedFields(allowedKeysForRegister),
     registerValidationSchema,
+    validate,
     registerController(context),
   );
 
@@ -28,6 +34,7 @@ export const makeAuthRouter: RouterFactory = (context: Context) => {
     upload.none(),
     checkForAllowedFields(allowedKeysForLogin),
     loginValidationSchema,
+    validate,
     loginController,
   );
 

@@ -3,10 +3,10 @@ export class CustomError extends Error {
 
   logMessage: string;
 
-  constructor(statusCode: number, message: string, logMessage?: string) {
-    super(message);
+  constructor(statusCode: number, logMessage: string) {
+    super(logMessage);
 
     this.statusCode = statusCode;
-    this.logMessage = logMessage || message;
+    this.logMessage = logMessage;
   }
 }

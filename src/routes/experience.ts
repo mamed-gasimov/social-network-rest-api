@@ -9,6 +9,7 @@ import {
   createExperienceValidationSchema,
   queryForPaginationValidationSchema,
   paramIdValidationSchema,
+  validate,
 } from '@middleware/validation';
 import {
   createExperienceController,
@@ -29,10 +30,11 @@ export const makeExperienceRouter: RouterFactory = (context: Context) => {
     roles([UserRole.Admin, UserRole.User]),
     checkForAllowedFields(allowedKeysForCreateExperience),
     createExperienceValidationSchema,
+    validate,
     createExperienceController(context),
   );
 
-  router.get('/:id', logRequestId, paramIdValidationSchema, getExperienceContoller(context));
+  router.get('/:id', logRequestId, paramIdValidationSchema, validate, getExperienceContoller(context));
 
   router.get(
     '/',
@@ -40,6 +42,7 @@ export const makeExperienceRouter: RouterFactory = (context: Context) => {
     roles([UserRole.Admin]),
     checkForAllowedFields(allowedKeysForGetResourceWithPagination, true),
     queryForPaginationValidationSchema,
+    validate,
     getExperiencesContoller(context),
   );
 
@@ -48,10 +51,11 @@ export const makeExperienceRouter: RouterFactory = (context: Context) => {
     logRequestId,
     checkForAllowedFields(allowedKeysForCreateExperience),
     [...paramIdValidationSchema, ...createExperienceValidationSchema],
+    validate,
     updateExperienceController(context),
   );
 
-  router.delete('/:id', logRequestId, paramIdValidationSchema, deleteExperienceController(context));
+  router.delete('/:id', logRequestId, paramIdValidationSchema, validate, deleteExperienceController(context));
 
   return router;
 };

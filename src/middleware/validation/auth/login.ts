@@ -8,5 +8,5 @@ export const loginValidationSchema = [
     .notEmpty()
     .withMessage('"password" is required')
     .isLength({ min: 8, max: 15 })
-    .withMessage('Password length should be between 8 and 15 charactes'),
+    .withMessage('"password" length should be between 8 and 15 charactes'),
 ];
