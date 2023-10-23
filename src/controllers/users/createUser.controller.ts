@@ -16,8 +16,8 @@ const createUserController = (context: Context) => async (req: ExtendedRequest, 
 
     const existedUser = await authService.findUserByEmail(email);
     if (existedUser) {
-      logger.error('The user with the current email already exists.');
-      return res.status(HTTP_STATUSES.BAD_REQUEST).json({ message: 'The user with the current email already exists.' });
+      const err = new CustomError(HTTP_STATUSES.BAD_REQUEST, 'The user with the current email already exists.');
+      return next(err);
     }
 
     const saltRounds = 12;

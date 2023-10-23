@@ -20,21 +20,19 @@ const updateProjectController =
       const foundProject = await projectsService.getProjectById(selectFields, +req.params.id);
 
       if (!foundProject) {
-        logger.error('Project was not found');
-        return res.status(HTTP_STATUSES.NOT_FOUND).json({ message: 'Project was not found' });
+        const err = new CustomError(HTTP_STATUSES.NOT_FOUND, 'Project was not found');
+        return next(err);
       }
 
       const { id, role: userRole } = req.user as { id: number; role: UserRole };
       if (foundProject.userId !== id && userRole !== UserRole.Admin) {
-        logger.error('Forbidden action. Only admin can update project created by another user.');
-        return res
-          .status(HTTP_STATUSES.FORBIDDEN)
-          .json({ message: 'Only admin can update project created by another user.' });
+        const err = new CustomError(HTTP_STATUSES.FORBIDDEN, 'Only admin can update project created by another user.');
+        return next(err);
       }
 
       if (foundProject.userId !== +userId) {
-        logger.error('Forbidden action. You can not change "userId" field.');
-        return res.status(HTTP_STATUSES.FORBIDDEN).json({ message: 'You can not change "userId" field' });
+        const err = new CustomError(HTTP_STATUSES.FORBIDDEN, 'You can not change "userId" field.');
+        return next(err);
       }
 
       const updatedProject = {

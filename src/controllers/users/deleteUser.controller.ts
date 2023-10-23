@@ -16,8 +16,8 @@ const deleteUserController = (context: Context) => async (req: ExtendedRequest, 
 
     const foundUser = await authService.findUserById(req.params.id);
     if (!foundUser) {
-      logger.error('User was not found');
-      return res.status(HTTP_STATUSES.NOT_FOUND).json({ message: 'User was not found' });
+      const err = new CustomError(HTTP_STATUSES.NOT_FOUND, 'User was not found');
+      return next(err);
     }
 
     await usersService.deleteUser(id, experienceService);

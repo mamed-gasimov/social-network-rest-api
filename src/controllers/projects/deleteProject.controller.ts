@@ -15,17 +15,15 @@ const deleteProjectController =
 
       const { id, role: userRole } = req.user as { id: number; role: UserRole };
       if (+req.body.userId !== id && userRole !== UserRole.Admin) {
-        logger.error('Forbidden action. Only admin can delete project created by another user.');
-        return res
-          .status(HTTP_STATUSES.FORBIDDEN)
-          .json({ message: 'Only admin can delete project created by another user.' });
+        const err = new CustomError(HTTP_STATUSES.FORBIDDEN, 'Only admin can delete project created by another user.');
+        return next(err);
       }
 
       const selectFields = ['id'];
       const foundProject = await projectsService.getProjectById(selectFields, +req.params.id);
       if (!foundProject) {
-        logger.error('Project was not found');
-        return res.status(HTTP_STATUSES.NOT_FOUND).json({ message: 'Project was not found' });
+        const err = new CustomError(HTTP_STATUSES.NOT_FOUND, 'Project was not found');
+        return next(err);
       }
 
       await projectsService.deleteProjectById(+req.params.id);

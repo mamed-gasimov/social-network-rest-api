@@ -18,8 +18,8 @@ const getUserController = (context: Context) => async (req: ExtendedRequest, res
     const foundUser = await usersService.getUser(selectFields, id);
 
     if (!foundUser) {
-      logger.error('User was not found');
-      return res.status(HTTP_STATUSES.NOT_FOUND).json({ message: 'User was not found' });
+      const err = new CustomError(HTTP_STATUSES.NOT_FOUND, 'User was not found');
+      return next(err);
     }
 
     const { firstName, lastName, title, summary, email, role } = foundUser;

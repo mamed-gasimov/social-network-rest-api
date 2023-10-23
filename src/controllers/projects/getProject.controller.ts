@@ -15,8 +15,8 @@ const getProjectController = (context: Context) => async (req: ExtendedRequest, 
     const selectFields = ['id', ...Object.keys(allowedKeysForCreateProject)];
     const foundProject = await projectsService.getProjectById(selectFields, +req.params.id);
     if (!foundProject) {
-      logger.error('Project was not found');
-      return res.status(HTTP_STATUSES.NOT_FOUND).json({ message: 'Project was not found' });
+      const err = new CustomError(HTTP_STATUSES.NOT_FOUND, 'Project was not found');
+      return next(err);
     }
 
     logger.info('Project was found successfully');

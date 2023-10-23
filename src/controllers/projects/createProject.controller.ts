@@ -15,20 +15,20 @@ const createProjectController =
 
       const { id: currentUserId } = req.user as { id: number };
       if (currentUserId !== +req.body.userId) {
-        logger.error('You can not create project for another user');
-        return res.status(HTTP_STATUSES.FORBIDDEN).json({ message: 'You can not create project for another user' });
+        const err = new CustomError(HTTP_STATUSES.FORBIDDEN, 'You can not create project for another user');
+        return next(err);
       }
 
       if (!req.file) {
-        logger.error('Project image file is required');
-        return res.status(HTTP_STATUSES.NOT_FOUND).json({ message: 'Project image file is required' });
+        const err = new CustomError(HTTP_STATUSES.NOT_FOUND, 'Project image file is required');
+        return next(err);
       }
 
       const foundUser = await authService.findUserById(req.body.userId);
 
       if (!foundUser) {
-        logger.error('User was not found');
-        return res.status(HTTP_STATUSES.NOT_FOUND).json({ message: 'User was not found' });
+        const err = new CustomError(HTTP_STATUSES.NOT_FOUND, 'User was not found');
+        return next(err);
       }
 
       const { userId, description } = req.body as CreateProjectRequestBody;

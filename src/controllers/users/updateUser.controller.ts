@@ -17,8 +17,8 @@ const updateUserController = (context: Context) => async (req: ExtendedRequest, 
     const foundUser = await authService.findUserById(req.params.id);
 
     if (!foundUser) {
-      logger.error('User was not found');
-      return res.status(HTTP_STATUSES.NOT_FOUND).json({ message: 'User was not found' });
+      const err = new CustomError(HTTP_STATUSES.NOT_FOUND, 'User was not found');
+      return next(err);
     }
 
     const { firstName, lastName, title, summary, email, password, role } = req.body as CreateUserRequestBody;
@@ -26,8 +26,8 @@ const updateUserController = (context: Context) => async (req: ExtendedRequest, 
     const userWithEmailExists = await authService.findUserByEmail(email);
 
     if (userWithEmailExists && userWithEmailExists.id !== foundUser.id) {
-      logger.error('This email is being used already');
-      return res.status(HTTP_STATUSES.BAD_REQUEST).json({ message: 'This email is being used already' });
+      const err = new CustomError(HTTP_STATUSES.BAD_REQUEST, 'This email is being used already');
+      return next(err);
     }
 
     const saltRounds = 12;
