@@ -6,6 +6,7 @@ import { Context, HTTP_STATUSES } from '@interfaces/general';
 import { UserRole } from '@models/user.model';
 import { CreateProjectRequestBody, allowedKeysForCreateProject } from '@interfaces/projects/createProject';
 import { CustomError } from '@helpers/customError';
+import { redisClient } from '@services/cache/base.cache';
 
 const updateProjectController =
   (context: Context) => async (req: ExtendedRequest, res: Response, next: NextFunction) => {
@@ -35,6 +36,10 @@ const updateProjectController =
         return next(err);
       }
 
+      if (!redisClient.isOpen) {
+        await redisClient.connect();
+      }
+
       const updatedProject = {
         userId: foundProject.userId,
         image: req.file ? req.file.filename : foundProject.image,
@@ -42,6 +47,7 @@ const updateProjectController =
       };
 
       await projectsService.updateProject(foundProject.id, updatedProject);
+      await redisClient.unlink(`capstone-project-user-${foundProject.userId}`);
 
       logger.info('Project was updated successfully');
       return res.status(HTTP_STATUSES.OK).json({ id: foundProject.id, ...updatedProject });

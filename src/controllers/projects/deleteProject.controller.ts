@@ -5,6 +5,7 @@ import { logger } from '@libs/logger';
 import { Context, HTTP_STATUSES } from '@interfaces/general';
 import { UserRole } from '@models/user.model';
 import { CustomError } from '@helpers/customError';
+import { redisClient } from '@services/cache/base.cache';
 
 const deleteProjectController =
   (context: Context) => async (req: ExtendedRequest, res: Response, next: NextFunction) => {
@@ -26,7 +27,12 @@ const deleteProjectController =
         return next(err);
       }
 
+      if (!redisClient.isOpen) {
+        await redisClient.connect();
+      }
+
       await projectsService.deleteProjectById(+req.params.id);
+      await redisClient.unlink(`capstone-project-user-${req.body.userId}`);
 
       logger.info('Project was deleted successfully');
       return res.status(HTTP_STATUSES.DELETED).json();

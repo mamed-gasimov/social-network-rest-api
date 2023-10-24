@@ -6,6 +6,7 @@ import { Context, HTTP_STATUSES } from '@interfaces/general';
 import { UserRole } from '@models/user.model';
 import { CreateFeedbackRequestBody, allowedKeysForCreateFeedback } from '@interfaces/feedback/createFeedback';
 import { CustomError } from '@helpers/customError';
+import { redisClient } from '@services/cache/base.cache';
 
 const updateFeedbackController =
   (context: Context) => async (req: ExtendedRequest, res: Response, next: NextFunction) => {
@@ -38,6 +39,10 @@ const updateFeedbackController =
         return next(err);
       }
 
+      if (!redisClient.isOpen) {
+        await redisClient.connect();
+      }
+
       const updatedFeedback = {
         fromUser: foundFeedback.fromUser,
         companyName,
@@ -46,6 +51,7 @@ const updateFeedbackController =
       };
 
       await feedbackService.updateFeedback(foundFeedback.id, updatedFeedback);
+      await redisClient.unlink(`capstone-project-user-${foundFeedback.toUser}`);
 
       logger.info('Feedback was updated successfully');
       return res.status(HTTP_STATUSES.OK).json({ id: foundFeedback.id, ...updatedFeedback });

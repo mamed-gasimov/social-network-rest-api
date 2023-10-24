@@ -7,6 +7,7 @@ import { Context, HTTP_STATUSES } from '@interfaces/general';
 import { UserRole } from '@models/user.model';
 import { CreateUserRequestBody, CreateUserResponseBody } from '@interfaces/users/createUser';
 import { CustomError } from '@helpers/customError';
+import { redisClient } from '@services/cache/base.cache';
 
 const updateUserController = (context: Context) => async (req: ExtendedRequest, res: Response, next: NextFunction) => {
   try {
@@ -28,6 +29,10 @@ const updateUserController = (context: Context) => async (req: ExtendedRequest, 
     if (userWithEmailExists && userWithEmailExists.id !== foundUser.id) {
       const err = new CustomError(HTTP_STATUSES.BAD_REQUEST, 'This email is being used already');
       return next(err);
+    }
+
+    if (!redisClient.isOpen) {
+      await redisClient.connect();
     }
 
     const saltRounds = 12;
@@ -53,6 +58,7 @@ const updateUserController = (context: Context) => async (req: ExtendedRequest, 
     }
 
     await usersService.updateUser(+req.params.id, userInfoForUpdate);
+    await redisClient.unlink(`capstone-project-user-${foundUser.id}`);
 
     delete userInfoForUpdate.password;
     const updatedUserInfo: CreateUserResponseBody = { id: `${req.params.id}`, ...userInfoForUpdate };

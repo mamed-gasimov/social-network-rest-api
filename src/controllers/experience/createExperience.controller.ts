@@ -6,6 +6,7 @@ import { Context, HTTP_STATUSES } from '@interfaces/general';
 import { CreateExperienceRequestBody } from '@interfaces/experience/createExperience';
 import { UserRole } from '@models/user.model';
 import { CustomError } from '@helpers/customError';
+import { redisClient } from '@services/cache/base.cache';
 
 const createExperienceController =
   (context: Context) => async (req: ExtendedRequest, res: Response, next: NextFunction) => {
@@ -27,9 +28,14 @@ const createExperienceController =
         return next(error);
       }
 
+      if (!redisClient.isOpen) {
+        await redisClient.connect();
+      }
+
       const { userId, companyName, role, startDate, endDate, description } = req.body as CreateExperienceRequestBody;
       const newExperience = { userId, companyName, role, startDate, endDate, description };
       const { id } = await experienceService.createExperience(newExperience);
+      await redisClient.unlink(`capstone-project-user-${foundUser.id}`);
 
       logger.info('Experience was successfully created');
       return res.status(HTTP_STATUSES.CREATED).json({ id, ...newExperience });

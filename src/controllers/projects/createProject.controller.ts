@@ -5,6 +5,7 @@ import { logger } from '@libs/logger';
 import { Context, HTTP_STATUSES } from '@interfaces/general';
 import { CreateProjectRequestBody } from '@interfaces/projects/createProject';
 import { CustomError } from '@helpers/customError';
+import { redisClient } from '@services/cache/base.cache';
 
 const createProjectController =
   (context: Context) => async (req: ExtendedRequest, res: Response, next: NextFunction) => {
@@ -31,10 +32,15 @@ const createProjectController =
         return next(err);
       }
 
+      if (!redisClient.isOpen) {
+        await redisClient.connect();
+      }
+
       const { userId, description } = req.body as CreateProjectRequestBody;
 
       const newProject = { userId: +userId, image: req.file.filename, description };
       const { id } = await projectsService.createProject(newProject);
+      await redisClient.unlink(`capstone-project-user-${foundUser.id}`);
 
       logger.info('Project was successfully created');
       return res.status(HTTP_STATUSES.CREATED).json({ id, ...newProject });

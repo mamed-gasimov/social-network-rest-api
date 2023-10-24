@@ -5,6 +5,7 @@ import { logger } from '@libs/logger';
 import { Context, HTTP_STATUSES } from '@interfaces/general';
 import { UserRole } from '@models/user.model';
 import { CustomError } from '@helpers/customError';
+import { redisClient } from '@services/cache/base.cache';
 
 const deleteFeedbackController =
   (context: Context) => async (req: ExtendedRequest, res: Response, next: NextFunction) => {
@@ -26,7 +27,12 @@ const deleteFeedbackController =
         return next(err);
       }
 
+      if (!redisClient.isOpen) {
+        await redisClient.connect();
+      }
+
       await feedbackService.deleteFeedbackById(+req.params.id);
+      await redisClient.unlink(`capstone-project-user-${foundFeedback.toUser}`);
 
       logger.info('Feedback was deleted successfully');
       return res.status(HTTP_STATUSES.DELETED).json();

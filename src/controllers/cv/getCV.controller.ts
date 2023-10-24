@@ -22,7 +22,7 @@ const getCVController = (context: Context) => async (req: ExtendedRequest, res: 
     let response: CVResponse;
     if (userCVFromCache) {
       response = JSON.parse(userCVFromCache);
-      logger.info('CV was returned successfully');
+      logger.info('CV was returned successfully from cache');
       return res.status(HTTP_STATUSES.OK).json(response);
     }
 

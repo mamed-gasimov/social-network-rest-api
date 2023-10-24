@@ -5,6 +5,7 @@ import { logger } from '@libs/logger';
 import { Context, HTTP_STATUSES } from '@interfaces/general';
 import { GetUserRequestParams } from '@interfaces/users/getUsers';
 import { CustomError } from '@helpers/customError';
+import { redisClient } from '@services/cache/base.cache';
 
 const deleteUserController = (context: Context) => async (req: ExtendedRequest, res: Response, next: NextFunction) => {
   try {
@@ -20,6 +21,11 @@ const deleteUserController = (context: Context) => async (req: ExtendedRequest, 
       return next(err);
     }
 
+    if (!redisClient.isOpen) {
+      await redisClient.connect();
+    }
+
+    await redisClient.unlink(`capstone-project-user-${foundUser.id}`);
     await usersService.deleteUser(id, experienceService);
 
     logger.info('User was deleted successfully');

@@ -5,6 +5,7 @@ import { logger } from '@libs/logger';
 import { Context, HTTP_STATUSES } from '@interfaces/general';
 import { UserRole } from '@models/user.model';
 import { CustomError } from '@helpers/customError';
+import { redisClient } from '@services/cache/base.cache';
 
 const deleteExperienceController =
   (context: Context) => async (req: ExtendedRequest, res: Response, next: NextFunction) => {
@@ -30,7 +31,12 @@ const deleteExperienceController =
         return next(err);
       }
 
+      if (!redisClient.isOpen) {
+        await redisClient.connect();
+      }
+
       await experienceService.deleteExperienceById(+req.params.id);
+      await redisClient.unlink(`capstone-project-user-${foundExperience.userId}`);
 
       logger.info('Experience was deleted successfully');
       return res.status(HTTP_STATUSES.DELETED).json();

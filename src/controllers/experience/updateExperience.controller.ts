@@ -6,6 +6,7 @@ import { Context, HTTP_STATUSES } from '@interfaces/general';
 import { CreateExperienceRequestBody, allowedKeysForCreateExperience } from '@interfaces/experience/createExperience';
 import { UserRole } from '@models/user.model';
 import { CustomError } from '@helpers/customError';
+import { redisClient } from '@services/cache/base.cache';
 
 const updateExperienceController =
   (context: Context) => async (req: ExtendedRequest, res: Response, next: NextFunction) => {
@@ -38,6 +39,10 @@ const updateExperienceController =
         return next(err);
       }
 
+      if (!redisClient.isOpen) {
+        await redisClient.connect();
+      }
+
       const updatedExperience = {
         userId: foundExperience.userId,
         companyName,
@@ -48,6 +53,7 @@ const updateExperienceController =
       };
 
       await experienceService.updateExperience(foundExperience.id, updatedExperience);
+      await redisClient.unlink(`capstone-project-user-${foundExperience.userId}`);
 
       logger.info('Experience was updated successfully');
       return res.status(HTTP_STATUSES.OK).json({ id: foundExperience.id, ...updatedExperience });

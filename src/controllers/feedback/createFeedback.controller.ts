@@ -5,6 +5,7 @@ import { logger } from '@libs/logger';
 import { Context, HTTP_STATUSES } from '@interfaces/general';
 import { CreateFeedbackRequestBody } from '@interfaces/feedback/createFeedback';
 import { CustomError } from '@helpers/customError';
+import { redisClient } from '@services/cache/base.cache';
 
 const createFeedbackController =
   (context: Context) => async (req: ExtendedRequest, res: Response, next: NextFunction) => {
@@ -26,9 +27,14 @@ const createFeedbackController =
         return next(err);
       }
 
+      if (!redisClient.isOpen) {
+        await redisClient.connect();
+      }
+
       const { fromUser, companyName, toUser, context: feedbackDescription } = req.body as CreateFeedbackRequestBody;
       const newFeedback = { companyName, context: feedbackDescription, toUser, fromUser };
       const { id } = await feedbackService.createFeedback(newFeedback);
+      await redisClient.unlink(`capstone-project-user-${foundToUser.id}`);
 
       logger.info('Feedback was successfully created');
       return res.status(HTTP_STATUSES.CREATED).json({ id, ...newFeedback });
