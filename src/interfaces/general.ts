@@ -1,7 +1,7 @@
 import express from 'express';
 
 import { User, Project, FeedBack, Experience } from '@models/index';
-import { AuthService, UsersService, ExperienceService, FeedbackService, ProjectsService } from '@services/index';
+import { AuthService, UsersService, ExperienceService, FeedbackService, ProjectsService } from '@services/db';
 
 export interface Context {
   services: {

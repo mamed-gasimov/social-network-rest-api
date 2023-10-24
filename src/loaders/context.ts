@@ -1,7 +1,7 @@
 import { Sequelize } from 'sequelize';
 
 import { Context, Models } from '@interfaces/general';
-import { AuthService, UsersService, ExperienceService, FeedbackService, ProjectsService } from '@services/index';
+import { AuthService, UsersService, ExperienceService, FeedbackService, ProjectsService } from '@services/db';
 
 export const loadContext = async (models: Models, sequelize: Sequelize): Promise<Context> => {
   const { user: userModel, experience: experienceModel, feedback: feedbackModel, project: projectModel } = models;

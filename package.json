@@ -36,7 +36,7 @@
     "passport-local": "^1.0.0",
     "pino": "^7.0.0-rc.8",
     "pino-pretty": "^7.0.1",
-    "redis": "^3.1.2",
+    "redis": "^4.6.10",
     "sequelize": "^6.6.5",
     "uuid": "^9.0.1"
   },

@@ -5,6 +5,7 @@ import { logger } from '@libs/logger';
 import { Context, HTTP_STATUSES } from '@interfaces/general';
 import { CVResponse, UserCV } from '@interfaces/cv';
 import { CustomError } from '@helpers/customError';
+import { redisClient } from '@services/cache/base.cache';
 
 const getCVController = (context: Context) => async (req: ExtendedRequest, res: Response, next: NextFunction) => {
   try {
@@ -13,6 +14,18 @@ const getCVController = (context: Context) => async (req: ExtendedRequest, res: 
       services: { usersService },
     } = context;
 
+    if (!redisClient.isOpen) {
+      await redisClient.connect();
+    }
+
+    const userCVFromCache = await redisClient.get(`capstone-project-user-${userId}`);
+    let response: CVResponse;
+    if (userCVFromCache) {
+      response = JSON.parse(userCVFromCache);
+      logger.info('CV was returned successfully');
+      return res.status(HTTP_STATUSES.OK).json(response);
+    }
+
     const foundUser: UserCV = (await usersService.getUserCV(userId)) as UserCV;
     if (!foundUser) {
       const err = new CustomError(HTTP_STATUSES.NOT_FOUND, 'User was not found');
@@ -20,7 +33,7 @@ const getCVController = (context: Context) => async (req: ExtendedRequest, res: 
     }
 
     const { id, firstName, lastName, title, summary, email, image, experiences, feedbacks, projects } = foundUser;
-    const response: CVResponse = {
+    response = {
       id: `${id}`,
       firstName,
       lastName,
@@ -32,6 +45,8 @@ const getCVController = (context: Context) => async (req: ExtendedRequest, res: 
       feedbacks,
       projects,
     };
+
+    await redisClient.set(`capstone-project-user-${id}`, JSON.stringify(response));
 
     logger.info('CV was returned successfully');
     return res.status(HTTP_STATUSES.OK).json(response);

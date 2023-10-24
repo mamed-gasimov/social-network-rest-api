@@ -2,7 +2,7 @@ import { Sequelize, Transaction } from 'sequelize';
 
 import { CreateUserRequestBody } from '@interfaces/users/createUser';
 import { User } from '@models/user.model';
-import { ExperienceService } from '@services/experience.service';
+import { ExperienceService } from '@services/db';
 import { Experience } from '@models/experience.model';
 import { FeedBack } from '@models/feedback.model';
 import { allowedKeysForCreateExperience } from '@interfaces/experience/createExperience';
