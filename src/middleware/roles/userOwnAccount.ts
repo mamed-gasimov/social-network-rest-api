@@ -10,7 +10,7 @@ type CheckForAdmin = {
 
 export const userOwnAccount =
   ({ checkForAdmin }: CheckForAdmin) =>
-  (req: Request, res: Response, next: NextFunction) => {
+  (req: Request, _res: Response, next: NextFunction) => {
     const { id, role } = req.user as { id: number; role: UserRole };
     const userId = +req.params.id;
 

@@ -19,8 +19,25 @@ export interface Config {
 
 const configs: {
   development: Config;
+  test: Config;
 } = {
   development: {
+    db: {
+      host: 'localhost',
+      port: 3306,
+      username: process.env.DB_USER_NAME,
+      password: process.env.DB_USER_PASSWORD,
+      database: 'capstone_project',
+    },
+    redis: {
+      host: 'localhost',
+      port: 6379,
+    },
+    auth: {
+      secret: 'some-dev-secret',
+    },
+  },
+  test: {
     db: {
       host: 'localhost',
       port: 3306,
@@ -42,13 +59,13 @@ const getConfig = (): Config => {
   configEnv();
 
   if (!process.env.NODE_ENV) {
-    throw new Error('Env parameter NODE_ENV must be specified! Possible values are "development", ...');
+    throw new Error('Env parameter NODE_ENV must be specified! Possible values are "development", "test" ...');
   }
 
   const env = process.env.NODE_ENV as 'development';
 
   if (!configs[env]) {
-    throw new Error('Unsupported NODE_ENV value was provided! Possible values are "development", ...');
+    throw new Error('Unsupported NODE_ENV value was provided! Possible values are "development", "test", ...');
   }
 
   configs.development.db.username = process.env.DB_USER_NAME;
