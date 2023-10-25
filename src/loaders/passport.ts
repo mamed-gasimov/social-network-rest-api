@@ -4,7 +4,6 @@ import { Strategy as JWTStrategy, ExtractJwt } from 'passport-jwt';
 import bcrypt from 'bcrypt';
 
 import { Loader } from '@interfaces/general';
-import { logger } from '@libs/logger';
 
 export const loadPassport: Loader = (_app, context) => {
   const {
@@ -46,7 +45,6 @@ export const loadPassport: Loader = (_app, context) => {
           const doesPasswordsMatch = await bcrypt.compare(password, user.password);
 
           if (!doesPasswordsMatch) {
-            logger.error('Invalid credentials');
             return done(null, false, {
               message: 'Invalid credentials!',
             });

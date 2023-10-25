@@ -161,5 +161,40 @@ describe('Auth endpoints', () => {
       expect(response.body.user).toEqual(mockResponseUser);
       expect(response.body.token).toBe('mockToken');
     });
+
+    it('should return "Invalid credentials" message with 400 error', async () => {
+      const loginPayload = { ...mockLoginPayload };
+      loginPayload.password = '12345678';
+
+      jest.spyOn(userModel, 'findOne').mockResolvedValueOnce(mockResponseUser as userModel);
+      jest.spyOn(bcrypt, 'compare').mockResolvedValueOnce(false as never);
+
+      const response = await supertest(app).post(ROUTES.auth.login).send(loginPayload);
+
+      expect(response.status).toEqual(HTTP_STATUSES.BAD_REQUEST);
+      expect(response.body).toEqual({ message: 'Invalid credentials' });
+    });
+
+    describe('Value is required', () => {
+      it('should return ""email" is required" and 400 status code', async () => {
+        const loginPayload = { ...mockLoginPayload };
+        loginPayload.email = '';
+
+        const response = await supertest(app).post(ROUTES.auth.login).send(loginPayload);
+
+        expect(response.status).toEqual(HTTP_STATUSES.BAD_REQUEST);
+        expect(response.body).toEqual({ message: '"email" is required' });
+      });
+
+      it('should return ""password" is required" and 400 status code', async () => {
+        const loginPayload = { ...mockLoginPayload };
+        delete loginPayload.password;
+
+        const response = await supertest(app).post(ROUTES.auth.login).send(loginPayload);
+
+        expect(response.status).toEqual(HTTP_STATUSES.BAD_REQUEST);
+        expect(response.body).toEqual({ message: '"password" is required' });
+      });
+    });
   });
 });

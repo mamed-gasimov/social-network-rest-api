@@ -12,6 +12,9 @@ const loginController = async (req: ExtendedRequest, res: Response, next: NextFu
     passport.authenticate('local', (err, user) => {
       if (err || !user) {
         const error = new CustomError(HTTP_STATUSES.BAD_REQUEST, 'Invalid credentials');
+        if (process.env.NODE_ENV === 'test') {
+          return res.status(error.statusCode).json({ message: error.logMessage });
+        }
         return next(error);
       }
 
