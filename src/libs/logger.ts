@@ -1,5 +1,5 @@
 import pino from 'pino';
 
 export const logger = pino({
-  prettyPrint: process.env.NODE_ENV === 'development',
+  prettyPrint: process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'test',
 });

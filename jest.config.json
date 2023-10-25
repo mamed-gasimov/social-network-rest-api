@@ -1,0 +1,35 @@
+{
+  "preset": "ts-jest",
+  "testEnvironment": "node",
+  "verbose": true,
+  "coverageDirectory": "coverage",
+  "collectCoverage": true,
+  "testPathIgnorePatterns": ["/node_modules/"],
+  "transform": {
+    "^.+\\.ts?$": "ts-jest"
+  },
+  "testMatch": ["<rootDir>/src/**/*spec.ts"],
+  "collectCoverageFrom": ["src/**/*.ts", "!**/node_modules/**"],
+  "coverageReporters": ["text-summary", "lcov"],
+  "coverageThreshold": {
+    "global": {
+      "branches": 1,
+      "functions": 1,
+      "lines": 1,
+      "statements": 1
+    }
+  },
+  "moduleNameMapper": {
+    "@config": ["<rootDir>/src/config"],
+    "@interfaces/(.*)": ["<rootDir>/src/interfaces/$1"],
+    "@libs/(.*)": ["<rootDir>/src/libs/$1"],
+    "@loaders/(.*)": ["<rootDir>/src/loaders/$1"],
+    "@middleware/(.*)": ["<rootDir>/src/middleware/$1"],
+    "@migrations/(.*)": ["<rootDir>/src/migrations/$1"],
+    "@models/(.*)": ["<rootDir>/src/models/$1"],
+    "@routes/(.*)": ["<rootDir>/src/routes/$1"],
+    "@services/(.*)": ["<rootDir>/src/services/$1"],
+    "@controllers/(.*)": ["<rootDir>/src/controllers/$1"],
+    "@helpers/(.*)": ["<rootDir>/src/helpers/$1"]
+  }
+}
