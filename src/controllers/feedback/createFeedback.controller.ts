@@ -32,7 +32,7 @@ const createFeedbackController =
       }
 
       const { fromUser, companyName, toUser, context: feedbackDescription } = req.body as CreateFeedbackRequestBody;
-      const newFeedback = { companyName, context: feedbackDescription, toUser, fromUser };
+      const newFeedback = { companyName, context: feedbackDescription, toUser: +toUser, fromUser: +fromUser };
       const { id } = await feedbackService.createFeedback(newFeedback);
 
       if (redisClient.isOpen) {

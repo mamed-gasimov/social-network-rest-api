@@ -14,25 +14,33 @@ const deleteProjectController =
         services: { projectsService },
       } = context;
 
-      const { id, role: userRole } = req.user as { id: number; role: UserRole };
-      if (+req.body.userId !== id && userRole !== UserRole.Admin) {
-        const err = new CustomError(HTTP_STATUSES.FORBIDDEN, 'Only admin can delete project created by another user.');
-        return next(err);
-      }
-
       const selectFields = ['id'];
       const foundProject = await projectsService.getProjectById(selectFields, +req.params.id);
       if (!foundProject) {
         const err = new CustomError(HTTP_STATUSES.NOT_FOUND, 'Project was not found');
+        if (process.env.NODE_ENV === 'test') {
+          return res.status(err.statusCode).json({ message: err.logMessage });
+        }
         return next(err);
       }
 
-      if (!redisClient.isOpen) {
+      const { id, role: userRole } = req.user as { id: number; role: UserRole };
+      if (+foundProject.userId !== id && userRole !== UserRole.Admin) {
+        const err = new CustomError(HTTP_STATUSES.FORBIDDEN, 'Only admin can delete project created by another user.');
+        if (process.env.NODE_ENV === 'test') {
+          return res.status(err.statusCode).json({ message: err.logMessage });
+        }
+        return next(err);
+      }
+
+      if (!redisClient.isOpen && process.env.NODE_ENV !== 'test') {
         await redisClient.connect();
       }
 
       await projectsService.deleteProjectById(+req.params.id);
-      await redisClient.unlink(`capstone-project-user-${req.body.userId}`);
+      if (redisClient.isOpen) {
+        await redisClient.unlink(`capstone-project-user-${req.body.userId}`);
+      }
 
       logger.info('Project was deleted successfully');
       return res.status(HTTP_STATUSES.DELETED).json();

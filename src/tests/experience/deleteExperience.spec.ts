@@ -12,6 +12,7 @@ describe('DELETE experience by id', () => {
     jest
       .spyOn(experienceModel, 'findOne')
       .mockResolvedValueOnce({ ...mockCreateExperiencePayload, id: 1 } as unknown as experienceModel);
+    jest.spyOn(experienceModel, 'destroy').mockResolvedValue(1);
 
     const response = await supertest(app).delete(ROUTES.experience.withIdParam).send();
 

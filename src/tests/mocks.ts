@@ -36,6 +36,13 @@ export const mockCreateProjectPayload = {
   description: 'some test description',
 };
 
+export const mockCreateFeedbackPayload = {
+  fromUser: mockResponseUser.id,
+  toUser: 11,
+  companyName: 'Test',
+  context: 'some test context description',
+};
+
 export const ROUTES = {
   auth: {
     register: '/api/auth/register',
