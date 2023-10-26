@@ -14,29 +14,29 @@ export const createUserValidationSchema = [
     .escape()
     .notEmpty()
     .withMessage('"firstName" is required')
-    .isLength({ min: 2, max: 15 })
-    .withMessage('Length of firstName should be between 2 and 15 charactes'),
+    .isLength({ min: 2, max: 30 })
+    .withMessage('Length of "firstName" should be between 2 and 30 characters'),
   body('lastName')
     .trim()
     .escape()
     .notEmpty()
     .withMessage('"lastName" is required')
-    .isLength({ min: 2, max: 15 })
-    .withMessage('Length of lastName should be between 2 and 15 charactes'),
+    .isLength({ min: 2, max: 30 })
+    .withMessage('Length of "lastName" should be between 2 and 30 characters'),
   body('title')
     .trim()
     .escape()
     .notEmpty()
     .withMessage('"title" is required')
-    .isLength({ min: 2 })
-    .withMessage('Length of title should be at least 2 characters'),
+    .isLength({ min: 2, max: 255 })
+    .withMessage('Length of "title" should be between 2 and 255 characters'),
   body('summary')
     .trim()
     .escape()
     .notEmpty()
     .withMessage('"summary" is required')
-    .isLength({ min: 2 })
-    .withMessage('Length of summary should be at least 2 characters'),
+    .isLength({ min: 2, max: 255 })
+    .withMessage('Length of "summary" should be between 2 and 255 characters'),
   body('role')
     .trim()
     .escape()
