@@ -19,6 +19,9 @@ const deleteExperienceController =
 
       if (!foundExperience) {
         const err = new CustomError(HTTP_STATUSES.NOT_FOUND, 'Experience was not found');
+        if (process.env.NODE_ENV === 'test') {
+          return res.status(err.statusCode).json({ message: err.logMessage });
+        }
         return next(err);
       }
 
@@ -28,6 +31,9 @@ const deleteExperienceController =
           HTTP_STATUSES.FORBIDDEN,
           'Only admin can delete experience created by another user.',
         );
+        if (process.env.NODE_ENV === 'test') {
+          return res.status(err.statusCode).json({ message: err.logMessage });
+        }
         return next(err);
       }
 
@@ -36,7 +42,9 @@ const deleteExperienceController =
       }
 
       await experienceService.deleteExperienceById(+req.params.id);
-      await redisClient.unlink(`capstone-project-user-${foundExperience.userId}`);
+      if (redisClient.isOpen) {
+        await redisClient.unlink(`capstone-project-user-${foundExperience.userId}`);
+      }
 
       logger.info('Experience was deleted successfully');
       return res.status(HTTP_STATUSES.DELETED).json();

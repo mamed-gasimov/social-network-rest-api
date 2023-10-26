@@ -37,5 +37,6 @@ export const ROUTES = {
   },
   experience: {
     create: '/api/experience',
+    withIdParam: '/api/experience/1',
   },
 } as const;

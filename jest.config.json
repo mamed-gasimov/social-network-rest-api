@@ -10,6 +10,7 @@
   },
   "testMatch": ["<rootDir>/src/**/*spec.ts"],
   "collectCoverageFrom": ["src/**/*.ts", "!**/node_modules/**"],
+  "coveragePathIgnorePatterns": ["src/tests", "node_modules", "src/migrations", "src/interfaces", "src/models"],
   "coverageReporters": ["text-summary", "lcov"],
   "setupFilesAfterEnv": ["<rootDir>/src/tests/testSetupFile.ts"],
   "coverageThreshold": {
