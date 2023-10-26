@@ -71,7 +71,13 @@ export class UsersService {
     });
   }
 
-  async deleteUser(id: number, experienceService: ExperienceService) {
+  async deleteUserById(id: number) {
+    return this.userModel.destroy({
+      where: { id },
+    });
+  }
+
+  async deleteUserWithTransaction(id: number, experienceService: ExperienceService) {
     let transactionDeleteUser: Transaction;
     try {
       transactionDeleteUser = await this.sequalize.transaction();

@@ -25,8 +25,11 @@ const deleteUserController = (context: Context) => async (req: ExtendedRequest, 
       await redisClient.connect();
     }
 
-    await redisClient.unlink(`capstone-project-user-${foundUser.id}`);
-    await usersService.deleteUser(id, experienceService);
+    if (redisClient.isOpen) {
+      await redisClient.unlink(`capstone-project-user-${foundUser.id}`);
+    }
+
+    await usersService.deleteUserById(id);
 
     logger.info('User was deleted successfully');
     return res.status(HTTP_STATUSES.DELETED).json();
