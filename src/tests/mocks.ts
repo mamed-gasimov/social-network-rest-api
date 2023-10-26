@@ -1,3 +1,5 @@
+import { UserRole } from '@models/user.model';
+
 export const mockUser = {
   email: 'test@t.com',
   password: 'test1234',
@@ -7,9 +9,20 @@ export const mockUser = {
   title: 'Dev',
 };
 
+export const payloadCreateUser = { ...mockUser, role: UserRole.User };
+
 export const mockResponseUser = {
   id: 12,
   email: 'test@t.com',
+  firstName: 'Jon',
+  lastName: 'Jones',
+  summary: 'test',
+  title: 'Dev',
+};
+
+export const mockResponseNewUser = {
+  id: '13',
+  email: 'test-1@t.com',
   firstName: 'Jon',
   lastName: 'Jones',
   summary: 'test',
