@@ -4,6 +4,12 @@ import { Strategy as JWTStrategy, ExtractJwt } from 'passport-jwt';
 import bcrypt from 'bcrypt';
 
 import { Loader } from '@interfaces/general';
+import { MockStrategy } from '@tests/mockStrategy';
+
+let Strategy = JWTStrategy;
+if (process.env.NODE_ENV === 'test') {
+  Strategy = MockStrategy as unknown as typeof JWTStrategy;
+}
 
 export const loadPassport: Loader = (_app, context) => {
   const {
@@ -11,7 +17,7 @@ export const loadPassport: Loader = (_app, context) => {
   } = context;
 
   passport.use(
-    new JWTStrategy(
+    new Strategy(
       {
         jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
         secretOrKey: 'some secret string here',

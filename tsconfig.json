@@ -21,7 +21,8 @@
       "@routes/*": ["src/routes/*"],
       "@services/*": ["src/services/*"],
       "@controllers/*": ["src/controllers/*"],
-      "@helpers/*": ["src/helpers/*"]
+      "@helpers/*": ["src/helpers/*"],
+      "@tests/*": ["src/tests/*"]
     },
     "plugins": [
       { "transform": "typescript-transform-paths" },

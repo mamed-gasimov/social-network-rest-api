@@ -31,6 +31,7 @@
     "@routes/(.*)": ["<rootDir>/src/routes/$1"],
     "@services/(.*)": ["<rootDir>/src/services/$1"],
     "@controllers/(.*)": ["<rootDir>/src/controllers/$1"],
-    "@helpers/(.*)": ["<rootDir>/src/helpers/$1"]
+    "@helpers/(.*)": ["<rootDir>/src/helpers/$1"],
+    "@tests/(.*)": ["<rootDir>/src/tests/$1"]
   }
 }
