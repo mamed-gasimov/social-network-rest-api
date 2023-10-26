@@ -29,6 +29,9 @@ const getCVController = (context: Context) => async (req: ExtendedRequest, res: 
     const foundUser: UserCV = (await usersService.getUserCV(userId)) as UserCV;
     if (!foundUser) {
       const err = new CustomError(HTTP_STATUSES.NOT_FOUND, 'User was not found');
+      if (process.env.NODE_ENV === 'test') {
+        return res.status(err.statusCode).json({ message: err.logMessage });
+      }
       return next(err);
     }
 

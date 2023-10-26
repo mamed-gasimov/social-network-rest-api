@@ -77,4 +77,7 @@ export const ROUTES = {
     main: '/api/users',
     withIdParam: '/api/users/1',
   },
+  cv: {
+    main: '/api/user/1/cv',
+  },
 } as const;

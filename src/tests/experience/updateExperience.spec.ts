@@ -44,8 +44,6 @@ describe('PUT update experience', () => {
     jest
       .spyOn(experienceModel, 'findOne')
       .mockResolvedValueOnce({ ...mockCreateExperiencePayload, id: 1 } as unknown as experienceModel);
-    //@ts-ignore
-    jest.spyOn(experienceModel, 'update').mockResolvedValueOnce([1, { ...mockCreateExperiencePayload, id: 1 }]);
 
     const response = await supertest(app)
       .put(ROUTES.experience.withIdParam)
