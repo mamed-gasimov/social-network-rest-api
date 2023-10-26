@@ -36,7 +36,7 @@ export const ROUTES = {
     login: '/api/auth/login',
   },
   experience: {
-    create: '/api/experience',
+    main: '/api/experience',
     withIdParam: '/api/experience/1',
   },
 } as const;

@@ -11,12 +11,7 @@ describe('POST create experience', () => {
     jest.spyOn(userModel, 'findOne').mockResolvedValue({ ...mockResponseUser, role: UserRole.Admin } as userModel);
     jest.spyOn(experienceModel, 'create').mockResolvedValueOnce({ ...mockCreateExperiencePayload, id: 1 });
 
-    const response = await supertest(app)
-      .post(ROUTES.experience.create)
-      .set({
-        Authorization: `Bearer mockToken`,
-      })
-      .send(mockCreateExperiencePayload);
+    const response = await supertest(app).post(ROUTES.experience.main).send(mockCreateExperiencePayload);
 
     expect(response.status).toEqual(HTTP_STATUSES.CREATED);
     expect(response.body).toEqual({ ...mockCreateExperiencePayload, id: 1 });
@@ -28,12 +23,7 @@ describe('POST create experience', () => {
       .mockResolvedValue({ ...mockResponseUser, id: 10, role: UserRole.User } as userModel);
     jest.spyOn(experienceModel, 'create').mockResolvedValueOnce({ ...mockCreateExperiencePayload, id: 1 });
 
-    const response = await supertest(app)
-      .post(ROUTES.experience.create)
-      .set({
-        Authorization: `Bearer mockToken`,
-      })
-      .send(mockCreateExperiencePayload);
+    const response = await supertest(app).post(ROUTES.experience.main).send(mockCreateExperiencePayload);
 
     expect(response.status).toEqual(HTTP_STATUSES.FORBIDDEN);
     expect(response.body).toEqual({ message: 'You can not create experience for another user' });
@@ -43,12 +33,7 @@ describe('POST create experience', () => {
     jest.spyOn(userModel, 'findOne').mockResolvedValueOnce({ ...mockResponseUser, role: UserRole.User } as userModel);
     jest.spyOn(userModel, 'findOne').mockResolvedValue(null);
 
-    const response = await supertest(app)
-      .post(ROUTES.experience.create)
-      .set({
-        Authorization: `Bearer mockToken`,
-      })
-      .send(mockCreateExperiencePayload);
+    const response = await supertest(app).post(ROUTES.experience.main).send(mockCreateExperiencePayload);
 
     expect(response.status).toEqual(HTTP_STATUSES.NOT_FOUND);
     expect(response.body).toEqual({ message: 'User was not found' });
@@ -62,12 +47,7 @@ describe('POST create experience', () => {
         .spyOn(userModel, 'findOne')
         .mockResolvedValueOnce({ ...mockResponseUser, role: UserRole.Admin } as userModel);
 
-      const response = await supertest(app)
-        .post(ROUTES.experience.create)
-        .set({
-          Authorization: `Bearer mockToken`,
-        })
-        .send(experiencePayload);
+      const response = await supertest(app).post(ROUTES.experience.main).send(experiencePayload);
 
       expect(response.status).toEqual(HTTP_STATUSES.BAD_REQUEST);
       expect(response.body).toEqual({ message: '"companyName" is required' });
@@ -80,12 +60,7 @@ describe('POST create experience', () => {
         .spyOn(userModel, 'findOne')
         .mockResolvedValueOnce({ ...mockResponseUser, role: UserRole.Admin } as userModel);
 
-      const response = await supertest(app)
-        .post(ROUTES.experience.create)
-        .set({
-          Authorization: `Bearer mockToken`,
-        })
-        .send(experiencePayload);
+      const response = await supertest(app).post(ROUTES.experience.main).send(experiencePayload);
 
       expect(response.status).toEqual(HTTP_STATUSES.BAD_REQUEST);
       expect(response.body).toEqual({ message: '"role" is required' });
@@ -100,12 +75,7 @@ describe('POST create experience', () => {
         .spyOn(userModel, 'findOne')
         .mockResolvedValueOnce({ ...mockResponseUser, role: UserRole.Admin } as userModel);
 
-      const response = await supertest(app)
-        .post(ROUTES.experience.create)
-        .set({
-          Authorization: `Bearer mockToken`,
-        })
-        .send(experiencePayload);
+      const response = await supertest(app).post(ROUTES.experience.main).send(experiencePayload);
 
       expect(response.status).toEqual(HTTP_STATUSES.BAD_REQUEST);
       expect(response.body).toEqual({ message: '"role" length can not be more than 255 characters long' });
@@ -118,12 +88,7 @@ describe('POST create experience', () => {
         .spyOn(userModel, 'findOne')
         .mockResolvedValueOnce({ ...mockResponseUser, role: UserRole.Admin } as userModel);
 
-      const response = await supertest(app)
-        .post(ROUTES.experience.create)
-        .set({
-          Authorization: `Bearer mockToken`,
-        })
-        .send(experiencePayload);
+      const response = await supertest(app).post(ROUTES.experience.main).send(experiencePayload);
 
       expect(response.status).toEqual(HTTP_STATUSES.BAD_REQUEST);
       expect(response.body).toEqual({ message: '"companyName" length can not be more than 110 characters long' });
@@ -133,9 +98,18 @@ describe('POST create experience', () => {
   it('should return "Invalid fields" and 400 status code', async () => {
     const experiencePayload = { ...mockCreateExperiencePayload, someOtherField: 10 };
     jest.spyOn(userModel, 'findOne').mockResolvedValueOnce({ ...mockResponseUser, role: UserRole.Admin } as userModel);
-    const response = await supertest(app).post(ROUTES.experience.create).send(experiencePayload);
+    const response = await supertest(app).post(ROUTES.experience.main).send(experiencePayload);
 
     expect(response.status).toEqual(HTTP_STATUSES.BAD_REQUEST);
     expect(response.body).toEqual({ message: 'Invalid fields' });
+  });
+
+  it('should return an empty object and 401 status code when not authorized', async () => {
+    jest.spyOn(userModel, 'findOne').mockResolvedValue(null);
+
+    const response = await supertest(app).post(ROUTES.experience.main).send(mockCreateExperiencePayload);
+
+    expect(response.status).toEqual(HTTP_STATUSES.NOT_AUTHORIZED);
+    expect(response.body).toEqual({});
   });
 });

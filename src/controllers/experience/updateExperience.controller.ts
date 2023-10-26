@@ -53,7 +53,9 @@ const updateExperienceController =
       };
 
       await experienceService.updateExperience(foundExperience.id, updatedExperience);
-      await redisClient.unlink(`capstone-project-user-${foundExperience.userId}`);
+      if (redisClient.isOpen) {
+        await redisClient.unlink(`capstone-project-user-${foundExperience.userId}`);
+      }
 
       logger.info('Experience was updated successfully');
       return res.status(HTTP_STATUSES.OK).json({ id: foundExperience.id, ...updatedExperience });

@@ -6,36 +6,24 @@ import { Experience as experienceModel } from '@models/experience.model';
 import { ROUTES, mockCreateExperiencePayload, mockResponseUser } from '@tests/mocks';
 import { app } from '@tests/testSetupFile';
 
-describe('DELETE experience by id', () => {
-  it('should return an empty object and 204 status code', async () => {
+describe('GET experience by id', () => {
+  it('should return an experience object and 200 status code', async () => {
     jest.spyOn(userModel, 'findOne').mockResolvedValue({ ...mockResponseUser, role: UserRole.Admin } as userModel);
     jest
       .spyOn(experienceModel, 'findOne')
       .mockResolvedValueOnce({ ...mockCreateExperiencePayload, id: 1 } as unknown as experienceModel);
 
-    const response = await supertest(app).delete(ROUTES.experience.withIdParam).send();
+    const response = await supertest(app).get(ROUTES.experience.withIdParam).send();
 
-    expect(response.status).toEqual(HTTP_STATUSES.DELETED);
-    expect(response.body).toEqual({});
-  });
-
-  it('should return "Only admin can delete experience created by another user." and 403 status code', async () => {
-    jest.spyOn(userModel, 'findOne').mockResolvedValueOnce({ ...mockResponseUser, role: UserRole.User } as userModel);
-    jest
-      .spyOn(experienceModel, 'findOne')
-      .mockResolvedValueOnce({ ...mockCreateExperiencePayload, id: 1, userId: 10 } as unknown as experienceModel);
-
-    const response = await supertest(app).delete(ROUTES.experience.withIdParam).send();
-
-    expect(response.status).toEqual(HTTP_STATUSES.FORBIDDEN);
-    expect(response.body).toEqual({ message: 'Only admin can delete experience created by another user.' });
+    expect(response.status).toEqual(HTTP_STATUSES.OK);
+    expect(response.body).toEqual({ ...mockCreateExperiencePayload, id: 1 });
   });
 
   it('should return "Experience was not found" and 404 status code', async () => {
     jest.spyOn(userModel, 'findOne').mockResolvedValueOnce({ ...mockResponseUser, role: UserRole.User } as userModel);
     jest.spyOn(experienceModel, 'findOne').mockResolvedValueOnce(null);
 
-    const response = await supertest(app).delete(ROUTES.experience.withIdParam).send();
+    const response = await supertest(app).get(ROUTES.experience.withIdParam).send();
 
     expect(response.status).toEqual(HTTP_STATUSES.NOT_FOUND);
     expect(response.body).toEqual({ message: 'Experience was not found' });
@@ -45,7 +33,7 @@ describe('DELETE experience by id', () => {
     jest.spyOn(userModel, 'findOne').mockResolvedValueOnce({ ...mockResponseUser, role: UserRole.User } as userModel);
 
     const response = await supertest(app)
-      .delete(ROUTES.experience.withIdParam + 'test')
+      .get(ROUTES.experience.withIdParam + 'test')
       .send();
 
     expect(response.status).toEqual(HTTP_STATUSES.BAD_REQUEST);
@@ -55,7 +43,7 @@ describe('DELETE experience by id', () => {
   it('should return an empty object and 401 status code when not authorized', async () => {
     jest.spyOn(userModel, 'findOne').mockResolvedValue(null);
 
-    const response = await supertest(app).delete(ROUTES.experience.withIdParam).send();
+    const response = await supertest(app).get(ROUTES.experience.withIdParam).send();
 
     expect(response.status).toEqual(HTTP_STATUSES.NOT_AUTHORIZED);
     expect(response.body).toEqual({});
