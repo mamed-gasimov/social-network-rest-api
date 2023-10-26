@@ -20,9 +20,9 @@ const createProjectController =
         return next(err);
       }
 
-      if (!req.file) {
-        const err = new CustomError(HTTP_STATUSES.NOT_FOUND, 'Project image file is required');
-        return next(err);
+      let image = 'default.png';
+      if (req.file) {
+        image = req.file.filename;
       }
 
       const foundUser = await authService.findUserById(req.body.userId);
@@ -38,7 +38,7 @@ const createProjectController =
 
       const { userId, description } = req.body as CreateProjectRequestBody;
 
-      const newProject = { userId: +userId, image: req.file.filename, description };
+      const newProject = { userId: +userId, image, description };
       const { id } = await projectsService.createProject(newProject);
       await redisClient.unlink(`capstone-project-user-${foundUser.id}`);
 

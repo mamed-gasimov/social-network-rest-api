@@ -30,6 +30,12 @@ export const mockCreateExperiencePayload = {
   description: 'some test description',
 };
 
+export const mockCreateProjectPayload = {
+  userId: mockResponseUser.id,
+  image: 'default.png',
+  description: 'some test description',
+};
+
 export const ROUTES = {
   auth: {
     register: '/api/auth/register',
@@ -38,5 +44,17 @@ export const ROUTES = {
   experience: {
     main: '/api/experience',
     withIdParam: '/api/experience/1',
+  },
+  project: {
+    main: '/api/projects',
+    withIdParam: '/api/projects/1',
+  },
+  feedback: {
+    main: '/api/feedback',
+    withIdParam: '/api/feedback/1',
+  },
+  user: {
+    main: '/api/users',
+    withIdParam: '/api/users/1',
   },
 } as const;
