@@ -22,11 +22,12 @@ export const mockLoginPayload = {
 };
 
 export const mockCreateExperiencePayload = {
-  userId: 12,
+  userId: mockResponseUser.id,
   companyName: 'Test',
   role: 'Dev',
   startDate: '10-24-2010',
   endDate: '11-20-2012',
+  description: 'some test description',
 };
 
 export const ROUTES = {

@@ -27,14 +27,17 @@ const createFeedbackController =
         return next(err);
       }
 
-      if (!redisClient.isOpen) {
+      if (!redisClient.isOpen && process.env.NODE_ENV !== 'test') {
         await redisClient.connect();
       }
 
       const { fromUser, companyName, toUser, context: feedbackDescription } = req.body as CreateFeedbackRequestBody;
       const newFeedback = { companyName, context: feedbackDescription, toUser, fromUser };
       const { id } = await feedbackService.createFeedback(newFeedback);
-      await redisClient.unlink(`capstone-project-user-${foundToUser.id}`);
+
+      if (redisClient.isOpen) {
+        await redisClient.unlink(`capstone-project-user-${foundToUser.id}`);
+      }
 
       logger.info('Feedback was successfully created');
       return res.status(HTTP_STATUSES.CREATED).json({ id, ...newFeedback });

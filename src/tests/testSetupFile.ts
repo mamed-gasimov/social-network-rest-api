@@ -7,6 +7,7 @@ jest.mock('@models/user.model.ts');
 jest.mock('@models/experience.model.ts');
 jest.mock('@models/feedback.model.ts');
 jest.mock('@models/project.model.ts');
+jest.mock('@services/cache/base.cache');
 
 const PORT = 3001;
 
