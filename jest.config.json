@@ -11,6 +11,7 @@
   "testMatch": ["<rootDir>/src/**/*spec.ts"],
   "collectCoverageFrom": ["src/**/*.ts", "!**/node_modules/**"],
   "coverageReporters": ["text-summary", "lcov"],
+  "setupFilesAfterEnv": ["<rootDir>/src/tests/testSetupFile.ts"],
   "coverageThreshold": {
     "global": {
       "branches": 1,
