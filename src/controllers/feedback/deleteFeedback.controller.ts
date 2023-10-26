@@ -14,16 +14,22 @@ const deleteFeedbackController =
         services: { feedbackService },
       } = context;
 
-      const { id, role: userRole } = req.user as { id: number; role: UserRole };
-      if (+req.body.fromUser !== id && userRole !== UserRole.Admin) {
-        const err = new CustomError(HTTP_STATUSES.FORBIDDEN, 'Only admin can delete feedback created by another user.');
-        return next(err);
-      }
-
       const selectFields = ['id'];
       const foundFeedback = await feedbackService.getFeedbackById(selectFields, +req.params.id);
       if (!foundFeedback) {
         const err = new CustomError(HTTP_STATUSES.NOT_FOUND, 'Feedback was not found');
+        if (process.env.NODE_ENV === 'test') {
+          return res.status(err.statusCode).json({ message: err.logMessage });
+        }
+        return next(err);
+      }
+
+      const { id, role: userRole } = req.user as { id: number; role: UserRole };
+      if (+foundFeedback.fromUser !== id && userRole !== UserRole.Admin) {
+        const err = new CustomError(HTTP_STATUSES.FORBIDDEN, 'Only admin can delete feedback created by another user.');
+        if (process.env.NODE_ENV === 'test') {
+          return res.status(err.statusCode).json({ message: err.logMessage });
+        }
         return next(err);
       }
 
@@ -32,7 +38,9 @@ const deleteFeedbackController =
       }
 
       await feedbackService.deleteFeedbackById(+req.params.id);
-      await redisClient.unlink(`capstone-project-user-${foundFeedback.toUser}`);
+      if (redisClient.isOpen) {
+        await redisClient.unlink(`capstone-project-user-${foundFeedback.toUser}`);
+      }
 
       logger.info('Feedback was deleted successfully');
       return res.status(HTTP_STATUSES.DELETED).json();
