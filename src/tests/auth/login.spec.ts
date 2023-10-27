@@ -9,9 +9,9 @@ import { app } from '../testSetupFile';
 
 describe('POST auth login', () => {
   it('should return a valid user and token upon successful login', async () => {
-    jest.spyOn(userModel, 'findOne').mockResolvedValueOnce(mockResponseUser as userModel);
-    jest.spyOn(bcrypt, 'compare').mockResolvedValueOnce(true as never);
-    jest.spyOn(jwt, 'sign').mockReturnValue('mockToken' as unknown as void);
+    jest.spyOn(userModel, 'findOne').mockImplementation(() => Promise.resolve(mockResponseUser) as never);
+    jest.spyOn(bcrypt, 'compare').mockImplementation(() => Promise.resolve(true));
+    jest.spyOn(jwt, 'sign').mockImplementation(() => 'mockToken');
 
     const response = await supertest(app).post(ROUTES.auth.login).send(mockLoginPayload);
 

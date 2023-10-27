@@ -17,7 +17,7 @@
     "format:check": "prettier --check 'src/**/*.{ts, json}'",
     "format": "prettier --write 'src/**/*.{ts, json}'",
     "test-clear-cache": "jest --clearCache",
-    "test": "jest --coverage=true -w=2 --forceExit --watchAll=false --detectOpenHandles"
+    "test": "jest --coverage -w=2 --forceExit --watchAll=false --detectOpenHandles"
   },
   "keywords": [],
   "author": "",

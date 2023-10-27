@@ -87,7 +87,7 @@ describe('POST auth register', () => {
   });
 
   describe('Length validations', () => {
-    it('should return ""password" length should be between 8 and 15 characters" and 400 status code', async () => {
+    it(`should return "password" length should be between 8 and 15 characters and 400 status code`, async () => {
       const userPayload = { ...mockUser };
       userPayload.password = '11';
       const response = await supertest(app).post(ROUTES.auth.register).send(userPayload);

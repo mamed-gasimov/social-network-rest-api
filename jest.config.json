@@ -9,8 +9,15 @@
     "^.+\\.ts?$": "ts-jest"
   },
   "testMatch": ["<rootDir>/src/**/*spec.ts"],
-  "collectCoverageFrom": ["src/**/*.ts", "!**/node_modules/**"],
-  "coveragePathIgnorePatterns": ["src/tests", "node_modules", "src/migrations", "src/interfaces", "src/models"],
+  "collectCoverageFrom": ["src/**/*.ts", "!src/**/index.ts", "!**/node_modules/**"],
+  "coveragePathIgnorePatterns": [
+    "src/tests",
+    "node_modules",
+    "src/migrations",
+    "src/interfaces",
+    "src/models",
+    "src/umzug.ts"
+  ],
   "coverageReporters": ["text-summary", "lcov"],
   "setupFilesAfterEnv": ["<rootDir>/src/tests/testSetupFile.ts"],
   "coverageThreshold": {

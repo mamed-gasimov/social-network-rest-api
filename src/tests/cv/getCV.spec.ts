@@ -2,7 +2,7 @@ import supertest from 'supertest';
 
 import { HTTP_STATUSES } from '@interfaces/general';
 import { UserRole, User as userModel } from '@models/user.model';
-import { ROUTES, mockUser, mockResponseUser } from '@tests/mocks';
+import { ROUTES, mockResponseUser } from '@tests/mocks';
 import { app } from '@tests/testSetupFile';
 import { redisClient } from '@services/cache/base.cache';
 import { CVResponse } from '@interfaces/cv';
