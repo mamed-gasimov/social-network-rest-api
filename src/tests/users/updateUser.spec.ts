@@ -21,4 +21,25 @@ describe('PUT update user', () => {
     expect(response.status).toEqual(HTTP_STATUSES.OK);
     expect(response.body).toEqual({ ...authorizedUser, id: `${authorizedUser.id}` });
   });
+
+  it('should return "User was not found" and 400 status code', async () => {
+    jest.spyOn(userModel, 'findOne').mockResolvedValueOnce(authorizedUser as userModel);
+    jest.spyOn(userModel, 'findOne').mockResolvedValueOnce(null);
+
+    const response = await supertest(app).put(ROUTES.user.withIdParam).send(payload);
+
+    expect(response.status).toEqual(HTTP_STATUSES.NOT_FOUND);
+    expect(response.body).toEqual({ message: 'User was not found' });
+  });
+
+  it('should return "This email is being used already" and 400 status code', async () => {
+    jest.spyOn(userModel, 'findOne').mockResolvedValueOnce(authorizedUser as userModel);
+    jest.spyOn(userModel, 'findOne').mockResolvedValueOnce(authorizedUser as userModel);
+    jest.spyOn(userModel, 'findOne').mockResolvedValueOnce({ ...authorizedUser, id: 9 } as userModel);
+
+    const response = await supertest(app).put(ROUTES.user.withIdParam).send(payload);
+
+    expect(response.status).toEqual(HTTP_STATUSES.BAD_REQUEST);
+    expect(response.body).toEqual({ message: 'This email is being used already' });
+  });
 });

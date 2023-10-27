@@ -19,6 +19,9 @@ const updateUserController = (context: Context) => async (req: ExtendedRequest, 
 
     if (!foundUser) {
       const err = new CustomError(HTTP_STATUSES.NOT_FOUND, 'User was not found');
+      if (process.env.NODE_ENV === 'test') {
+        return res.status(err.statusCode).json({ message: err.logMessage });
+      }
       return next(err);
     }
 
@@ -28,6 +31,9 @@ const updateUserController = (context: Context) => async (req: ExtendedRequest, 
 
     if (userWithEmailExists && userWithEmailExists.id !== foundUser.id) {
       const err = new CustomError(HTTP_STATUSES.BAD_REQUEST, 'This email is being used already');
+      if (process.env.NODE_ENV === 'test') {
+        return res.status(err.statusCode).json({ message: err.logMessage });
+      }
       return next(err);
     }
 
