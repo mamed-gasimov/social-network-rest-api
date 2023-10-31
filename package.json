@@ -4,8 +4,8 @@
   "description": "",
   "main": "./dist/src/index.js",
   "scripts": {
-    "build": "tsc",
-    "start": "tsc & node .",
+    "build": "ttsc -p .",
+    "start": "NODE_ENV=production node ./dist/src/index.js",
     "dev": "tsc -w & cross-env NODE_ENV=development nodemon -r tsconfig-paths/register ./src/index.ts",
     "migrations:dev": "cross-env NODE_ENV=development node ./migrate.js",
     "migrations:dev:up": "npm run migrations:dev -- up",
@@ -78,6 +78,7 @@
     "ts-jest": "^29.1.1",
     "ts-node": "^10.8.1",
     "tsconfig-paths": "^4.2.0",
+    "ttypescript": "^1.5.15",
     "typescript": "^4.9.5",
     "typescript-transform-paths": "^3.4.6",
     "umzug": "^3.0.0-beta.16"
