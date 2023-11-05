@@ -6,7 +6,7 @@
   "scripts": {
     "build": "ttsc -p .",
     "start": "NODE_ENV=production node ./dist/src/index.js",
-    "dev": "tsc -w & cross-env NODE_ENV=development nodemon -r tsconfig-paths/register ./src/index.ts",
+    "dev": "ttsc -w & cross-env NODE_ENV=development nodemon -r tsconfig-paths/register ./src/index.ts",
     "migrations:dev": "cross-env NODE_ENV=development node ./migrate.js",
     "migrations:dev:up": "npm run migrations:dev -- up",
     "migrations:dev:down": "npm run migrations:dev -- down",
